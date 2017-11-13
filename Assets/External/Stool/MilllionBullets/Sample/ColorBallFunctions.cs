@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Stool.MilllionBullets.Sample
 {
-    struct ColorBallBulletOption
+    struct ColorBallOption
     {
         public Vector3 Accel;
         public Vector4 Color;
 
-        public ColorBallBulletOption(Vector3 accel, Vector4 color)
+        public ColorBallOption(Vector3 accel, Vector4 color)
         {
             Accel = accel;
             Color = color;
         }
     }
 
-    class ColorBallFunctions : BufferFunctionsBase<ColorBallBulletOption>
+    class ColorBallFunctions : BufferFunctionsBase<ColorBallOption>
     {
         [SerializeField] private int _length;
         [SerializeField] private Shader _surfaceShader;
@@ -24,9 +24,12 @@ namespace Stool.MilllionBullets.Sample
 
         private Material _material;
 
+        private readonly int ThreadNum = 8;
+
         public void Awake()
         {
             _material = new Material(_surfaceShader);
+            _material.SetTexture("_MainTex", _texture);
         }
 
         public override void AddOptions(ComputeBuffer optionsBuffer, int n, ComputeBuffer indicesBuffer, ComputeBuffer inputBuffer)
@@ -36,12 +39,11 @@ namespace Stool.MilllionBullets.Sample
             _computeShader.SetBuffer(kernel, "Options", optionsBuffer);
             _computeShader.SetBuffer(kernel, "OptionsInput", inputBuffer);
             _computeShader.SetBuffer(kernel, "Indices", indicesBuffer);
-            _computeShader.Dispatch(kernel, (n - 1) / 8 + 1, 1, 1);
+            _computeShader.Dispatch(kernel, (n - 1) / ThreadNum + 1, 1, 1);
         }
 
         public override void RenderBullets(ComputeBuffer statesBuffer, ComputeBuffer optionsBuffer)
         {
-            _material.SetTexture("_MainTex", _texture);
             _material.SetBuffer("Options", optionsBuffer);
             _material.SetBuffer("States", statesBuffer);
             _material.SetPass(0);
@@ -53,8 +55,8 @@ namespace Stool.MilllionBullets.Sample
             _computeShader.SetBuffer(0, "States", statesBuffer);
             _computeShader.SetBuffer(0, "Options", optionsBuffer);
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
-            _computeShader.SetFloat("ColorDecSpeed", 0.5f);
-            _computeShader.Dispatch(0, statesBuffer.count / 8 + 1, 1, 1);
+            _computeShader.SetFloat("ColorDecSpeed", 0.2f);
+            _computeShader.Dispatch(0, statesBuffer.count / ThreadNum + 1, 1, 1);
         }
 
         public override int GetLength()

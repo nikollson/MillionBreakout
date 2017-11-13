@@ -8,8 +8,9 @@ namespace Stool.MilllionBullets.Buffer
     class EmptyIndexQueue
     {
         public int RestQueue { get; private set; }
+        public int Length { get; private set; }
 
-        private ComputeShader _emptyComputeShader;
+        private ComputeShader _basicComputeShader;
         private ComputeBuffer _emptyIndexQueue;
         private ComputeBuffer _statesBuffer;
         private ComputeBuffer _inoutBuffer;
@@ -17,13 +18,16 @@ namespace Stool.MilllionBullets.Buffer
         private int[] _inoutReciveArray;
         private int[] _counterRecieveArray;
 
-        public EmptyIndexQueue(ComputeShader emptyComputeShader, ComputeBuffer statesBuffer, int length)
+        private readonly int ThreadNum = 8;
+
+        public EmptyIndexQueue(ComputeShader basicComputeShader, ComputeBuffer statesBuffer, int length)
         {
-            _emptyComputeShader = emptyComputeShader;
+            Length = length;
+            _basicComputeShader = basicComputeShader;
             _statesBuffer = statesBuffer;
-            _emptyIndexQueue = new ComputeBuffer(length, sizeof(int), ComputeBufferType.Append);
-            _inoutBuffer = new ComputeBuffer(length, sizeof(int));
-            _pushQueueCounter = new ComputeBuffer(8*1*1, sizeof(int));
+            _emptyIndexQueue = new ComputeBuffer(Length, sizeof(int), ComputeBufferType.Append);
+            _inoutBuffer = new ComputeBuffer(Length, sizeof(int));
+            _pushQueueCounter = new ComputeBuffer(ThreadNum, sizeof(int));
 
             _inoutReciveArray = new int[_inoutBuffer.count];
             _counterRecieveArray = new int[_pushQueueCounter.count];
@@ -45,11 +49,11 @@ namespace Stool.MilllionBullets.Buffer
         public int[] PopEmptyIndices(int num)
         {
             RestQueue = Math.Max(0, RestQueue - num);
-            int kernel = _emptyComputeShader.FindKernel("PopIndices");
-            _emptyComputeShader.SetInt("N",num);
-            _emptyComputeShader.SetBuffer(kernel, "InoutBuffer", _inoutBuffer);
-            _emptyComputeShader.SetBuffer(kernel, "ConsumeQueue", _emptyIndexQueue);
-            _emptyComputeShader.Dispatch(kernel, (num - 1) / 8 + 1, 1, 1);
+            int kernel = _basicComputeShader.FindKernel("PopIndices");
+            _basicComputeShader.SetInt("N",num);
+            _basicComputeShader.SetBuffer(kernel, "InoutBuffer", _inoutBuffer);
+            _basicComputeShader.SetBuffer(kernel, "ConsumeQueue", _emptyIndexQueue);
+            _basicComputeShader.Dispatch(kernel, (num - 1) / ThreadNum + 1, 1, 1);
 
             _inoutBuffer.GetData(_inoutReciveArray);
             var ret = new int[num];
@@ -62,11 +66,11 @@ namespace Stool.MilllionBullets.Buffer
 
         public void Update()
         {
-            int kernel = _emptyComputeShader.FindKernel("Update");
-            _emptyComputeShader.SetBuffer(kernel,"PushQueueCounter", _pushQueueCounter);
-            _emptyComputeShader.SetBuffer(kernel, "States",_statesBuffer);
-            _emptyComputeShader.SetBuffer(kernel, "AppendQueue", _emptyIndexQueue);
-            _emptyComputeShader.Dispatch(kernel, (_emptyIndexQueue.count - 1) / 8 + 1, 1, 1);
+            int kernel = _basicComputeShader.FindKernel("Update");
+            _basicComputeShader.SetBuffer(kernel,"PushQueueCounter", _pushQueueCounter);
+            _basicComputeShader.SetBuffer(kernel, "States",_statesBuffer);
+            _basicComputeShader.SetBuffer(kernel, "AppendQueue", _emptyIndexQueue);
+            _basicComputeShader.Dispatch(kernel, (_emptyIndexQueue.count - 1) / ThreadNum + 1, 1, 1);
 
             int sumPre = _counterRecieveArray.Sum(x => x);
             _pushQueueCounter.GetData(_counterRecieveArray);
