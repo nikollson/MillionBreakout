@@ -1,5 +1,6 @@
 ﻿#pragma kernel PopIndices
 #pragma kernel Update
+#pragma kernel AddStates
 
 struct State
 {
@@ -8,14 +9,13 @@ struct State
 	int IsDead;
 };
 
-
-
 int N;
 AppendStructuredBuffer<int> AppendQueue;
 ConsumeStructuredBuffer<int> ConsumeQueue;
 RWStructuredBuffer<int> PushQueueCounter;
 RWStructuredBuffer<int> InoutBuffer;
 RWStructuredBuffer<State> States;
+RWStructuredBuffer<State> StateInputs;
 
 [numthreads(8, 1, 1)]
 void PopIndices(uint3 id : SV_DispatchThreadID)
@@ -33,4 +33,12 @@ void Update(uint3 id : SV_DispatchThreadID, uint3 threadID : SV_GroupThreadID)
 		PushQueueCounter[threadID.x] += 1;
 		AppendQueue.Append(id.x);
 	}
+}
+
+
+[numthreads(8,1,1)]
+void AddStates(uint3 id : SV_DispatchThreadID)
+{
+	if (id.x >= (uint)N)return;
+	States[InoutBuffer[id.x]] = StateInputs[id.x];
 }

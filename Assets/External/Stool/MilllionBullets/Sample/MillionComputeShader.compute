@@ -1,4 +1,5 @@
 ﻿#pragma kernel CSMain
+#pragma kernel AddOptions
 
 struct State
 {
@@ -13,10 +14,13 @@ struct Option
 	float4 Col;
 };
 
+int N;
 float DeltaTime;
 float ColorDecSpeed;
 RWStructuredBuffer<State> States;
 RWStructuredBuffer<Option> Options;
+RWStructuredBuffer<Option> OptionsInput;
+RWStructuredBuffer<int> Indices;
 
 [numthreads(8, 1, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
@@ -31,4 +35,12 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 	{
 		States[id.x].IsDead = 1;
 	}
+}
+
+
+[numthreads(8, 1, 1)]
+void AddOptions(uint3 id : SV_DispatchThreadID)
+{
+	if (id.x >= N)return;
+	Options[Indices[id.x]] = OptionsInput[id.x];
 }

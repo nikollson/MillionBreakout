@@ -29,15 +29,14 @@ namespace Stool.MilllionBullets.Sample
             _material = new Material(_surfaceShader);
         }
 
-        public override void AddOptions(ComputeBuffer optionsBuffer, int[] indices, ColorBallBulletOption[] options)
+        public override void AddOptions(ComputeBuffer optionsBuffer, int n, ComputeBuffer indicesBuffer, ComputeBuffer inputBuffer)
         {
-            var array = new ColorBallBulletOption[optionsBuffer.count];
-            optionsBuffer.GetData(array);
-            for (int i = 0; i < indices.Length; i++)
-            {
-                array[indices[i]] = options[i];
-            }
-            optionsBuffer.SetData(array);
+            int kernel = _computeShader.FindKernel("AddOptions");
+            _computeShader.SetInt("N", n);
+            _computeShader.SetBuffer(kernel, "Options", optionsBuffer);
+            _computeShader.SetBuffer(kernel, "OptionsInput", inputBuffer);
+            _computeShader.SetBuffer(kernel, "Indices", indicesBuffer);
+            _computeShader.Dispatch(kernel, (n - 1) / 8 + 1, 1, 1);
         }
 
         public override void RenderBullets(ComputeBuffer statesBuffer, ComputeBuffer optionsBuffer)

@@ -5,7 +5,7 @@ namespace Stool.MilllionBullets
 {
     abstract class BufferFunctionsBase<TOption> : MonoBehaviour where TOption:struct 
     {
-        public virtual void AddOptions(ComputeBuffer optionsBuffer, int[] indices, TOption[] options) 
+        public virtual void AddOptions(ComputeBuffer optionsBuffer, int n, ComputeBuffer indicesBuffer, ComputeBuffer inputBuffer) 
         {
             Debug.LogError("Not override AddData");
         }
@@ -24,6 +24,11 @@ namespace Stool.MilllionBullets
         {
             Debug.LogError("Not override GetLength");
             return 0;
+        }
+
+        public virtual int GetCopyBufferLength()
+        {
+            return 100;
         }
     }
 }
