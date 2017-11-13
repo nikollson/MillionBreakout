@@ -19,7 +19,7 @@ namespace Stool.MilllionBullets.Sample
         void Update()
         {
             cnt += 1;
-            if (cnt % 100 == 0)
+            if (cnt % 20 == 0)
             {
                 int len = ColorBallBuffer.GetRestAddlessSize();
                 var states = new BulletState[len];

@@ -24,13 +24,14 @@ void PopIndices(uint3 id : SV_DispatchThreadID)
 	InoutBuffer[id.x] = ConsumeQueue.Consume();
 }
 
+
 [numthreads(8, 1, 1)]
 void Update(uint3 id : SV_DispatchThreadID, uint3 threadID : SV_GroupThreadID)
 {
 	if (States[id.x].IsDead && States[id.x].Enable)
 	{
 		States[id.x].Enable = 0;
-		PushQueueCounter[threadID.x] += 1;
+		InterlockedAdd(PushQueueCounter[threadID.x], 1);
 		AppendQueue.Append(id.x);
 	}
 }

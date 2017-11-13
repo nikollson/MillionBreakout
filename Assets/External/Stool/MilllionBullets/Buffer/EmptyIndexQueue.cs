@@ -23,7 +23,7 @@ namespace Stool.MilllionBullets.Buffer
             _statesBuffer = statesBuffer;
             _emptyIndexQueue = new ComputeBuffer(length, sizeof(int), ComputeBufferType.Append);
             _inoutBuffer = new ComputeBuffer(length, sizeof(int));
-            _pushQueueCounter = new ComputeBuffer(8*1*1, sizeof(int), ComputeBufferType.Counter);
+            _pushQueueCounter = new ComputeBuffer(8*1*1, sizeof(int));
 
             _inoutReciveArray = new int[_inoutBuffer.count];
             _counterRecieveArray = new int[_pushQueueCounter.count];

@@ -41,6 +41,6 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 [numthreads(8, 1, 1)]
 void AddOptions(uint3 id : SV_DispatchThreadID)
 {
-	if (id.x >= N)return;
+	if (id.x >= (uint)N)return;
 	Options[Indices[id.x]] = OptionsInput[id.x];
 }

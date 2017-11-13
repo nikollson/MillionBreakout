@@ -53,7 +53,7 @@ namespace Stool.MilllionBullets.Sample
             _computeShader.SetBuffer(0, "States", statesBuffer);
             _computeShader.SetBuffer(0, "Options", optionsBuffer);
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
-            _computeShader.SetFloat("ColorDecSpeed", 0.05f);
+            _computeShader.SetFloat("ColorDecSpeed", 0.5f);
             _computeShader.Dispatch(0, statesBuffer.count / 8 + 1, 1, 1);
         }
 
