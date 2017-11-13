@@ -2,23 +2,33 @@
 
 struct State
 {
-	float3 pos;
-	int enable;
+	float3 Pos;
+	int Enable;
+	int IsDead;
 };
 
 struct Option
 {
-	float3 accel;
-	float4 col;
+	float3 Accel;
+	float4 Col;
 };
 
 float DeltaTime;
+float ColorDecSpeed;
 RWStructuredBuffer<State> States;
 RWStructuredBuffer<Option> Options;
 
 [numthreads(8, 1, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-	if (States[id.x].enable == 0)return;
-	States[id.x].pos += Options[id.x].accel * DeltaTime;
+	if (States[id.x].Enable == 0)return;
+	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
+	Options[id.x].Col[0] = max(0, Options[id.x].Col[0] - ColorDecSpeed * DeltaTime);
+	Options[id.x].Col[1] = max(0, Options[id.x].Col[1] - ColorDecSpeed * DeltaTime);
+	Options[id.x].Col[2] = max(0, Options[id.x].Col[2] - ColorDecSpeed * DeltaTime);
+
+	if (Options[id.x].Col[0] + Options[id.x].Col[1] + Options[id.x].Col[2] < 0.5)
+	{
+		States[id.x].IsDead = 1;
+	}
 }

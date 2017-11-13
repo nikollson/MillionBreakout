@@ -35,7 +35,7 @@ namespace Stool.MilllionBullets.Sample
             optionsBuffer.GetData(array);
             for (int i = 0; i < indices.Length; i++)
             {
-                array[indices[i]] = options[indices[i]];
+                array[indices[i]] = options[i];
             }
             optionsBuffer.SetData(array);
         }
@@ -54,6 +54,7 @@ namespace Stool.MilllionBullets.Sample
             _computeShader.SetBuffer(0, "States", statesBuffer);
             _computeShader.SetBuffer(0, "Options", optionsBuffer);
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
+            _computeShader.SetFloat("ColorDecSpeed", 0.05f);
             _computeShader.Dispatch(0, statesBuffer.count / 8 + 1, 1, 1);
         }
 

@@ -1,22 +1,10 @@
 ﻿
 using System.Runtime.InteropServices;
-using Stool.MilllionBullets.Implements;
+using Stool.MilllionBullets.Buffer;
 using UnityEngine;
 
 namespace Stool.MilllionBullets
 {
-    struct State
-    {
-        public Vector3 Position;
-        public int Enable;
-
-        public State(Vector3 position, int enable)
-        {
-            Position = position;
-            Enable = enable;
-        }
-    }
-
     class BulletsBuffer<TOption> where TOption:struct 
     {
         private BufferFunctionsBase<TOption> _functions;
@@ -30,15 +18,14 @@ namespace Stool.MilllionBullets
             var length = functions.GetLength();
             _functions = functions;
 
-            _emptyIndexQueue = new EmptyIndexQueue(emptyComputeShader, length);
-            _statesBuffer = new ComputeBuffer(length, Marshal.SizeOf(typeof(State)));
+            _statesBuffer = new ComputeBuffer(length, Marshal.SizeOf(typeof(BulletState)));
             _optionsBuffer = new ComputeBuffer(length, Marshal.SizeOf(typeof(TOption)));
+            _emptyIndexQueue = new EmptyIndexQueue(emptyComputeShader, _statesBuffer, length);
         }
 
-        public void AddBullets(State[] states, TOption[] options)
+        public void AddBullets(BulletState[] states, TOption[] options)
         {
-            var indices = _emptyIndexQueue.GetEmptyIndices(states.Length);
-
+            var indices = _emptyIndexQueue.PopEmptyIndices(states.Length);
             _functions.AddOptions(_optionsBuffer, indices, options);
             AddStates(_statesBuffer, indices, states);
         }
@@ -46,6 +33,7 @@ namespace Stool.MilllionBullets
         public void Update()
         {
             _functions.UpdateBullets(_statesBuffer, _optionsBuffer);
+            _emptyIndexQueue.Update();
         }
 
         public void Render()
@@ -57,15 +45,21 @@ namespace Stool.MilllionBullets
         {
             _statesBuffer.Release();
             _optionsBuffer.Release();
+            _emptyIndexQueue.Release();
         }
 
-        private void AddStates(ComputeBuffer buffer, int[] indices, State[] states)
+        public int GetRestAddlessSize()
         {
-            var array = new State[buffer.count];
+            return _emptyIndexQueue.RestQueue;
+        }
+
+        private void AddStates(ComputeBuffer buffer, int[] indices, BulletState[] states)
+        {
+            var array = new BulletState[buffer.count];
             buffer.GetData(array);
             for (int i = 0; i < indices.Length; i++)
             {
-                array[indices[i]] = states[indices[i]];
+                array[indices[i]] = states[i];
             }
             buffer.SetData(array);
         }

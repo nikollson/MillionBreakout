@@ -23,14 +23,15 @@
 	// 弾の構造体
 	struct State
 	{
-		float3 pos;
-		int enable;
+		float3 Pos;
+		int Enable;
+		int IsDead;
 	};
 
 	struct Option
 	{
-		float3 accel;
-		float4 col;
+		float3 Accel;
+		float4 Col;
 	};
 
 	// 弾の構造化バッファ
@@ -49,11 +50,11 @@
 	{
 		// idを元に、弾の情報を取得
 		VSOut output;
-		output.pos = float4(States[id].pos, 1);
+		output.pos = float4(States[id].Pos, 1);
 		output.tex = float2(0, 0);
 		output.col = float4(0, 0, 0, 0);
-		if (States[id].enable) {
-			output.col = Options[id].col;
+		if (States[id].Enable) {
+			output.col = Options[id].Col;
 		}
 		return output;
 	}
