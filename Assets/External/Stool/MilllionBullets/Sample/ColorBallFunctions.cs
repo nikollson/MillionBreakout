@@ -24,7 +24,7 @@ namespace Stool.MilllionBullets.Sample
 
         private Material _material;
 
-        private readonly int ThreadNum = 8;
+        private readonly int ThreadNum = 32;
 
         public void Awake()
         {
@@ -52,11 +52,12 @@ namespace Stool.MilllionBullets.Sample
 
         public override void UpdateBullets(ComputeBuffer statesBuffer, ComputeBuffer optionsBuffer)
         {
-            _computeShader.SetBuffer(0, "States", statesBuffer);
-            _computeShader.SetBuffer(0, "Options", optionsBuffer);
+            int kernel = _computeShader.FindKernel("Update");
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
             _computeShader.SetFloat("ColorDecSpeed", 0.2f);
-            _computeShader.Dispatch(0, statesBuffer.count / ThreadNum + 1, 1, 1);
+            _computeShader.SetBuffer(kernel, "States", statesBuffer);
+            _computeShader.SetBuffer(kernel, "Options", optionsBuffer);
+            _computeShader.Dispatch(kernel, (statesBuffer.count-1) / ThreadNum + 1, 1, 1);
         }
 
         public override int GetLength()

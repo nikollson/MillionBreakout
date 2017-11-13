@@ -1,6 +1,8 @@
 ﻿#pragma kernel PopIndices
-#pragma kernel Update
+#pragma kernel UpdateState
 #pragma kernel AddStates
+
+#define THREADS 32
 
 struct State
 {
@@ -17,16 +19,16 @@ RWStructuredBuffer<int> InoutBuffer;
 RWStructuredBuffer<State> States;
 RWStructuredBuffer<State> StateInputs;
 
-[numthreads(8, 1, 1)]
-void PopIndices(uint3 id : SV_DispatchThreadID)
+[numthreads(THREADS, 1, 1)]
+void PopIndices(int3 id : SV_DispatchThreadID)
 {
-	if (id.x >= (uint)N)return;
+	if (id.x >= N)return;
 	InoutBuffer[id.x] = ConsumeQueue.Consume();
 }
 
 
-[numthreads(8, 1, 1)]
-void Update(uint3 id : SV_DispatchThreadID, uint3 threadID : SV_GroupThreadID)
+[numthreads(THREADS, 1, 1)]
+void UpdateState(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID)
 {
 	if (States[id.x].IsDead && States[id.x].Enable)
 	{
@@ -37,9 +39,9 @@ void Update(uint3 id : SV_DispatchThreadID, uint3 threadID : SV_GroupThreadID)
 }
 
 
-[numthreads(8,1,1)]
-void AddStates(uint3 id : SV_DispatchThreadID)
+[numthreads(THREADS,1,1)]
+void AddStates(int3 id : SV_DispatchThreadID)
 {
-	if (id.x >= (uint)N)return;
+	if (id.x >= N)return;
 	States[InoutBuffer[id.x]] = StateInputs[id.x];
 }

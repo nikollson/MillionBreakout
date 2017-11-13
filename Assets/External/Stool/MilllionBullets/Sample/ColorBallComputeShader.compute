@@ -1,5 +1,7 @@
-﻿#pragma kernel CSMain
+﻿#pragma kernel Update
 #pragma kernel AddOptions
+
+#define THREADS 32
 
 struct State
 {
@@ -22,8 +24,8 @@ RWStructuredBuffer<Option> Options;
 RWStructuredBuffer<Option> OptionsInput;
 RWStructuredBuffer<int> Indices;
 
-[numthreads(8, 1, 1)]
-void CSMain(uint3 id : SV_DispatchThreadID)
+[numthreads(THREADS, 1, 1)]
+void Update(int3 id : SV_DispatchThreadID)
 {
 	if (States[id.x].Enable == 0)return;
 	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
@@ -38,9 +40,9 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 }
 
 
-[numthreads(8, 1, 1)]
-void AddOptions(uint3 id : SV_DispatchThreadID)
+[numthreads(THREADS, 1, 1)]
+void AddOptions(int3 id : SV_DispatchThreadID)
 {
-	if (id.x >= (uint)N)return;
+	if (id.x >= N)return;
 	Options[Indices[id.x]] = OptionsInput[id.x];
 }

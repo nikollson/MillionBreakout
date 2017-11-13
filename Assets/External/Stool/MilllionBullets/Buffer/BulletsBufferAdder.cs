@@ -17,7 +17,7 @@ namespace Stool.MilllionBullets.Buffer
         private ComputeBuffer _optionsCopyBuffer;
         private ComputeBuffer _statesCopyBuffer;
 
-        private readonly int ThreadNum = 8;
+        private readonly int ThreadNum = 32;
 
         public BulletsBufferAdder(CommonData<TOption> common, ComputeShader basicComputeShader)
         {

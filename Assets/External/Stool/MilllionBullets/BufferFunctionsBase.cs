@@ -1,4 +1,5 @@
 ﻿
+using System;
 using UnityEngine;
 
 namespace Stool.MilllionBullets
@@ -28,7 +29,7 @@ namespace Stool.MilllionBullets
 
         public virtual int GetCopyBufferLength()
         {
-            return 100;
+            return Math.Max(100, GetLength() / 20);
         }
     }
 }

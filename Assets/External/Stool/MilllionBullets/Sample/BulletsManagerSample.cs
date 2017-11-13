@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.MilllionBullets.Sample
 {
-    class FunctionsManagerSample : MonoBehaviour
+    class BulletsManagerSample : MonoBehaviour
     {
         [SerializeField] private ComputeShader _emptyIndexComputeShader;
         [SerializeField] private ColorBallFunctions _colorBallFunctions;

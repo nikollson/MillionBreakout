@@ -18,7 +18,7 @@ namespace Stool.MilllionBullets.Buffer
         private int[] _inoutReciveArray;
         private int[] _counterRecieveArray;
 
-        private readonly int ThreadNum = 8;
+        private readonly int ThreadNum = 32;
 
         public EmptyIndexQueue(ComputeShader basicComputeShader, ComputeBuffer statesBuffer, int length)
         {
@@ -66,7 +66,7 @@ namespace Stool.MilllionBullets.Buffer
 
         public void Update()
         {
-            int kernel = _basicComputeShader.FindKernel("Update");
+            int kernel = _basicComputeShader.FindKernel("UpdateState");
             _basicComputeShader.SetBuffer(kernel,"PushQueueCounter", _pushQueueCounter);
             _basicComputeShader.SetBuffer(kernel, "States",_statesBuffer);
             _basicComputeShader.SetBuffer(kernel, "AppendQueue", _emptyIndexQueue);
