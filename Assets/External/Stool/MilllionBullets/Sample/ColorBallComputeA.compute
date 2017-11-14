@@ -18,27 +18,10 @@ struct Option
 
 int N;
 float DeltaTime;
-float ColorDecSpeed;
 RWStructuredBuffer<State> States;
 RWStructuredBuffer<Option> Options;
 RWStructuredBuffer<Option> OptionsInput;
 RWStructuredBuffer<int> Indices;
-
-[numthreads(THREADS, 1, 1)]
-void Update(int3 id : SV_DispatchThreadID)
-{
-	if (States[id.x].Enable == 0)return;
-	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
-	Options[id.x].Col[0] = max(0, Options[id.x].Col[0] - ColorDecSpeed * DeltaTime);
-	Options[id.x].Col[1] = max(0, Options[id.x].Col[1] - ColorDecSpeed * DeltaTime);
-	Options[id.x].Col[2] = max(0, Options[id.x].Col[2] - ColorDecSpeed * DeltaTime);
-
-	if (Options[id.x].Col[0] + Options[id.x].Col[1] + Options[id.x].Col[2] < 0.5)
-	{
-		States[id.x].IsDead = 1;
-	}
-}
-
 
 [numthreads(THREADS, 1, 1)]
 void AddOptions(int3 id : SV_DispatchThreadID)
@@ -46,3 +29,20 @@ void AddOptions(int3 id : SV_DispatchThreadID)
 	if (id.x >= N)return;
 	Options[Indices[id.x]] = OptionsInput[id.x];
 }
+
+[numthreads(THREADS, 1, 1)]
+void Update(int3 id : SV_DispatchThreadID)
+{
+	float colorDecSpeed = 0.2;
+	if (States[id.x].Enable == 0)return;
+	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
+	Options[id.x].Col[0] = max(0, Options[id.x].Col[0] - colorDecSpeed * DeltaTime);
+	Options[id.x].Col[1] = max(0, Options[id.x].Col[1] - colorDecSpeed * DeltaTime);
+	Options[id.x].Col[2] = max(0, Options[id.x].Col[2] - colorDecSpeed * DeltaTime);
+
+	if (Options[id.x].Col[0] + Options[id.x].Col[1] + Options[id.x].Col[2] < 0.5)
+	{
+		States[id.x].IsDead = 1;
+	}
+}
+

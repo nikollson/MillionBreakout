@@ -1,0 +1,39 @@
+﻿#pragma kernel Update
+#pragma kernel AddOptions
+
+#define THREADS 32
+
+struct State
+{
+	float3 Pos;
+	int Enable;
+	int IsDead;
+};
+
+struct Option
+{
+	float3 Accel;
+	float4 Col;
+};
+
+int N;
+float DeltaTime;
+RWStructuredBuffer<State> States;
+RWStructuredBuffer<Option> Options;
+RWStructuredBuffer<Option> OptionsInput;
+RWStructuredBuffer<int> Indices;
+
+[numthreads(THREADS, 1, 1)]
+void AddOptions(int3 id : SV_DispatchThreadID)
+{
+	if (id.x >= N)return;
+	Options[Indices[id.x]] = OptionsInput[id.x];
+}
+
+[numthreads(THREADS, 1, 1)]
+void Update(int3 id : SV_DispatchThreadID)
+{
+	if (States[id.x].Enable == 0)return;
+	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
+}
+

@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace Stool.MilllionBullets.Sample
 {
-    class BulletsManagerSample : MonoBehaviour
+    class BufferSampleManager : MonoBehaviour
     {
         [SerializeField] private ComputeShader _emptyIndexComputeShader;
         [SerializeField] private ColorBallFunctions _colorBallFunctions;
-
-        //public BulletsBuffer_Old<ColorBallOption> ColorBallBufferOld { get; private set; }
+        
         public BulletsBuffer<ColorBallOption> ColorBallBuffer { get; private set; }
 
         void Awake()
@@ -29,11 +28,10 @@ namespace Stool.MilllionBullets.Sample
                 {
                     states[i] =
                         new BulletState(
-                            new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f),
-                                Random.Range(-10.0f, 10.0f)));
+                            new Vector3(Random.Range(-10.0f, 10.0f), Random.Range(-10.0f, 10.0f),0));
                     options[i] =
                         new ColorBallOption(
-                            new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f)) * 0.5f,
+                            new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), 0) * 0.5f,
                             new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)));
                 }
                 ColorBallBuffer.Adder.AddBullets(states, options);

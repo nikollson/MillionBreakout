@@ -38,7 +38,6 @@ void UpdateState(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID
 	}
 }
 
-
 [numthreads(THREADS,1,1)]
 void AddStates(int3 id : SV_DispatchThreadID)
 {

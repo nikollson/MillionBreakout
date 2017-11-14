@@ -54,7 +54,6 @@ namespace Stool.MilllionBullets.Sample
         {
             int kernel = _computeShader.FindKernel("Update");
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
-            _computeShader.SetFloat("ColorDecSpeed", 0.2f);
             _computeShader.SetBuffer(kernel, "States", statesBuffer);
             _computeShader.SetBuffer(kernel, "Options", optionsBuffer);
             _computeShader.Dispatch(kernel, (statesBuffer.count-1) / ThreadNum + 1, 1, 1);
