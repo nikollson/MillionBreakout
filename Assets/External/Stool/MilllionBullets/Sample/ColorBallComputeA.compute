@@ -6,13 +6,14 @@
 struct State
 {
 	float3 Pos;
+	float3 Velocity;
+	float Radius;
 	int Enable;
 	int IsDead;
 };
 
 struct Option
 {
-	float3 Accel;
 	float4 Col;
 };
 
@@ -35,7 +36,6 @@ void Update(int3 id : SV_DispatchThreadID)
 {
 	float colorDecSpeed = 0.2;
 	if (States[id.x].Enable == 0)return;
-	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
 	Options[id.x].Col[0] = max(0, Options[id.x].Col[0] - colorDecSpeed * DeltaTime);
 	Options[id.x].Col[1] = max(0, Options[id.x].Col[1] - colorDecSpeed * DeltaTime);
 	Options[id.x].Col[2] = max(0, Options[id.x].Col[2] - colorDecSpeed * DeltaTime);

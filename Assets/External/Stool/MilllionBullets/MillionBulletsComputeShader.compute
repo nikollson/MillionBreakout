@@ -1,4 +1,5 @@
 ﻿#pragma kernel PopIndices
+#pragma kernel UpdateQueue
 #pragma kernel UpdateState
 #pragma kernel AddStates
 
@@ -7,11 +8,14 @@
 struct State
 {
 	float3 Pos;
+	float3 Velocity;
+	float Radius;
 	int Enable;
 	int IsDead;
 };
 
 int N;
+float DeltaTime;
 AppendStructuredBuffer<int> AppendQueue;
 ConsumeStructuredBuffer<int> ConsumeQueue;
 RWStructuredBuffer<int> PushQueueCounter;
@@ -28,7 +32,7 @@ void PopIndices(int3 id : SV_DispatchThreadID)
 
 
 [numthreads(THREADS, 1, 1)]
-void UpdateState(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID)
+void UpdateQueue(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID)
 {
 	if (States[id.x].IsDead && States[id.x].Enable)
 	{
@@ -36,6 +40,13 @@ void UpdateState(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID
 		InterlockedAdd(PushQueueCounter[threadID.x], 1);
 		AppendQueue.Append(id.x);
 	}
+}
+
+[numthreads(THREADS, 1, 1)]
+void UpdateState(int3 id : SV_DispatchThreadID, int3 threadID : SV_GroupThreadID)
+{
+	if (States[id.x].Enable == 0)return;
+	States[id.x].Pos += States[id.x].Velocity * DeltaTime;
 }
 
 [numthreads(THREADS,1,1)]

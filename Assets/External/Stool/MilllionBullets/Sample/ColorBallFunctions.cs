@@ -5,22 +5,21 @@ namespace Stool.MilllionBullets.Sample
 {
     struct ColorBallOption
     {
-        public Vector3 Accel;
         public Vector4 Color;
 
-        public ColorBallOption(Vector3 accel, Vector4 color)
+        public ColorBallOption(Vector4 color)
         {
-            Accel = accel;
             Color = color;
         }
     }
 
     class ColorBallFunctions : BufferFunctionsBase<ColorBallOption>
     {
-        [SerializeField] private int _length;
+        [SerializeField] private int _length = 100;
         [SerializeField] private Shader _surfaceShader;
         [SerializeField] private ComputeShader _computeShader;
         [SerializeField] private Texture2D _texture;
+        [SerializeField] private float _radius = 0.1f;
 
         private Material _material;
 
@@ -62,6 +61,11 @@ namespace Stool.MilllionBullets.Sample
         public override int GetLength()
         {
             return _length;
+        }
+
+        public float GetRadius()
+        {
+            return _radius;
         }
     }
 }

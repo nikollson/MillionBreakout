@@ -6,13 +6,14 @@
 struct State
 {
 	float3 Pos;
+	float3 Velocity;
+	float Radius;
 	int Enable;
 	int IsDead;
 };
 
 struct Option
 {
-	float3 Accel;
 	float4 Col;
 };
 
@@ -34,6 +35,6 @@ void AddOptions(int3 id : SV_DispatchThreadID)
 void Update(int3 id : SV_DispatchThreadID)
 {
 	if (States[id.x].Enable == 0)return;
-	States[id.x].Pos += Options[id.x].Accel * DeltaTime;
+
 }
 

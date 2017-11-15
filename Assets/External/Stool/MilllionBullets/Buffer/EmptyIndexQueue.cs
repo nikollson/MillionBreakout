@@ -40,7 +40,7 @@ namespace Stool.MilllionBullets.Buffer
             var array = new int[_emptyIndexQueue.count];
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = i;
+                array[i] = array.Length - i - 1;
             }
             _emptyIndexQueue.SetData(array);
             _emptyIndexQueue.SetCounterValue((uint)array.Length);
@@ -66,7 +66,7 @@ namespace Stool.MilllionBullets.Buffer
 
         public void Update()
         {
-            int kernel = _basicComputeShader.FindKernel("UpdateState");
+            int kernel = _basicComputeShader.FindKernel("UpdateQueue");
             _basicComputeShader.SetBuffer(kernel,"PushQueueCounter", _pushQueueCounter);
             _basicComputeShader.SetBuffer(kernel, "States",_statesBuffer);
             _basicComputeShader.SetBuffer(kernel, "AppendQueue", _emptyIndexQueue);

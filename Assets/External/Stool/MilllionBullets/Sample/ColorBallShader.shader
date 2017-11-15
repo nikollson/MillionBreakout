@@ -24,13 +24,14 @@
 	struct State
 	{
 		float3 Pos;
+		float3 Velocity;
+		float Radius;
 		int Enable;
 		int IsDead;
 	};
 
 	struct Option
 	{
-		float3 Accel;
 		float4 Col;
 	};
 
@@ -43,6 +44,7 @@
 		float4 pos : SV_POSITION;
 		float2 tex : TEXCOORD0;
 		float4 col : COLOR;
+		float radius : RADIUS;
 	};
 
 	// 頂点シェーダ
@@ -56,6 +58,7 @@
 		if (States[id].Enable) {
 			output.col = Options[id].Col;
 		}
+		output.radius = States[id].Radius;
 		return output;
 	}
 
@@ -68,7 +71,6 @@
 			outStream.RestartStrip();
 			return;
 		}
-
 
 		VSOut output;
 
@@ -93,11 +95,12 @@
 				output.tex = tex;
 
 				// 頂点位置を計算
-				output.pos = pos + mul(float4((tex * 2 - float2(1, 1)) * 0.2, 0, 1), billboardMatrix);
+				output.pos = pos + mul(float4((tex * 2 - float2(1, 1)) * input[0].radius, 0, 1), billboardMatrix);
 				output.pos = mul(UNITY_MATRIX_VP, output.pos);
 
-				// 色
+				// その他の値も設定
 				output.col = col;
+				output.radius = input[0].radius;
 
 				// ストリームに頂点を追加
 				outStream.Append(output);
