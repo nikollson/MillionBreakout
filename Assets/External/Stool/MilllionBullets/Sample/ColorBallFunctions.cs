@@ -28,7 +28,6 @@ namespace Stool.MilllionBullets.Sample
         public void Awake()
         {
             _material = new Material(_surfaceShader);
-            _material.SetTexture("_MainTex", _texture);
         }
 
         public override void AddOptions(ComputeBuffer optionsBuffer, int n, ComputeBuffer indicesBuffer, ComputeBuffer inputBuffer)
@@ -45,6 +44,7 @@ namespace Stool.MilllionBullets.Sample
         {
             _material.SetBuffer("Options", optionsBuffer);
             _material.SetBuffer("States", statesBuffer);
+            _material.SetTexture("_MainTex", _texture);
             _material.SetPass(0);
             Graphics.DrawProcedural(MeshTopology.Points, statesBuffer.count);
         }

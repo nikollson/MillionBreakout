@@ -1,4 +1,5 @@
 ﻿#pragma kernel CheckBoxCollision
+#pragma kernel CheckBlocksCollision
 
 #define THREADS 32
 
@@ -10,33 +11,56 @@ struct State
 	int Enable;
 	int IsDead;
 };
+
+struct BlockElement
+{
+	int X;
+	int Y;
+	int LifePoint;
+};
+
 RWStructuredBuffer<State> States;
+RWStructuredBuffer<BlockElement> BlockElements;
 
 float3 BoxCenter;
 float BoxAngle;
 float BoxWidth;
 float BoxHeight;
+float DivideX;
+float DivideY;
+int ArrayWidth;
+int ArrayHeight;
 
-[numthreads(THREADS, 1, 1)]
-void CheckBoxCollision(int3 id : SV_DispatchThreadID)
+struct CollisionData
 {
-	if (States[id.x].Enable == 0)return;
+	float3 NextVelocity;
+	float3 NextPosition;
+	float Distance;
+	int IsHit;
+};
 
-	float c = cos(BoxAngle);
-	float s = sin(BoxAngle);
+CollisionData _CheckBoxCollision(
+	float3 boxCenter, float angle, float width, float height,
+	float3 bulletCenter, float3 velocity, float radius)
+{
+	float c = cos(angle);
+	float s = sin(angle);
 
-	float3 local = States[id.x].Pos - BoxCenter;
+	float3 local = bulletCenter - boxCenter;
 	float x = c * local.x + s * local.y;
 	float y = -s * local.x + c * local.y;
 
-	float xdistRaw = abs(x) - BoxWidth / 2;
-	float ydistRaw = abs(y) - BoxHeight / 2;
+	float xdistRaw = abs(x) - width * 0.5f;
+	float ydistRaw = abs(y) - height * 0.5f;
 
 	float xdist = max(0, xdistRaw);
 	float ydist = max(0, ydistRaw);
-	float radius = States[id.x].Radius;
+	float sqrDistance = xdist * xdist + ydist * ydist;
 
-	if (xdist * xdist + ydist*ydist < radius * radius)
+	CollisionData ret;
+	ret.IsHit = sqrDistance < radius * radius;
+
+	if (ret.IsHit)
 	{
 		float3 localDir = float3(xdist * sign(x), ydist * sign(y), 0);
 		if (xdist == 0 && ydist == 0)
@@ -48,11 +72,78 @@ void CheckBoxCollision(int3 id : SV_DispatchThreadID)
 
 		float rx = c * localDir.x - s * localDir.y;
 		float ry = s * localDir.x + c * localDir.y;
-		float3 reflecDir = float3(rx, ry, 0);
+		float3 reflectDir = float3(rx, ry, 0);
 
-		float d = min(0, dot(States[id.x].Velocity, reflecDir));
-		States[id.x].Velocity += reflecDir * d * -2;
-		States[id.x].Pos += reflecDir * min(max(ydistRaw, xdistRaw) - radius, 0) * -1;
+		float d = min(0, dot(velocity, reflectDir));
+		ret.NextVelocity = velocity + reflectDir * d * -2;
+		ret.NextPosition = bulletCenter + reflectDir * min(max(ydistRaw, xdistRaw) - radius, 0) * -1;
+		ret.Distance = max(ydistRaw, xdistRaw);
+	}
+	else
+	{
+		ret.NextVelocity = float3(0, 0, 0);
+		ret.NextPosition = float3(0, 0, 0);
+		ret.Distance = 0;
+	}
+	return ret;
+}
+
+[numthreads(THREADS, 1, 1)]
+void CheckBoxCollision(int3 id : SV_DispatchThreadID)
+{
+	if (States[id.x].Enable == 0)return;
+
+	CollisionData collisionData = _CheckBoxCollision(
+		BoxCenter, BoxAngle, BoxWidth, BoxHeight,
+		States[id.x].Pos, States[id.x].Velocity, States[id.x].Radius);
+
+	if (collisionData.IsHit) {
+		States[id.x].Velocity = collisionData.NextVelocity;
+		States[id.x].Pos = collisionData.NextPosition;
 	}
 }
+
+[numthreads(THREADS, 1, 1)]
+void CheckBlocksCollision(int3 id : SV_DispatchThreadID)
+{
+	if (States[id.x].Enable == 0)return;
+
+	CollisionData result;
+
+	float divW = BoxWidth * DivideX;
+	float divH = BoxHeight * DivideY;
+
+	for (int i = 0; i < ArrayHeight; i++)
+	{
+		for (int j = 0; j < ArrayWidth; j++)
+		{
+			int eID = i * ArrayWidth + j;
+			if (BlockElements[eID].LifePoint <= 0)continue;
+
+			float x = (j + 0.5f) * divW - BoxWidth*0.5f;
+			float y = (i + 0.5f) * divH - BoxHeight*0.5f;
+			float s = sin(BoxAngle);
+			float c = cos(BoxAngle);
+			float3 t = float3(c*x - s*y, s*x + c*y, 0);
+
+			CollisionData collisionData = _CheckBoxCollision(
+				BoxCenter+t, BoxAngle, divW, divH,
+				States[id.x].Pos, States[id.x].Velocity, States[id.x].Radius);
+
+			if (collisionData.IsHit) {
+				BlockElements[eID].LifePoint -= 1;
+				if (result.IsHit == 0 || result.Distance > collisionData.Distance)
+				{
+					result = collisionData;
+				}
+			}
+		}
+	}
+	if (result.IsHit)
+	{
+		States[id.x].Velocity = result.NextVelocity;
+		States[id.x].Pos = result.NextPosition;
+	}
+}
+
 

@@ -1,4 +1,4 @@
-﻿Shader "Custom/MillionBullets/ColorBallShader" {
+﻿Shader "Custom/MillionBullets/BlocksShader" {
 	SubShader{
 		// アルファを使う
 		ZWrite On
@@ -17,48 +17,42 @@
 
 #include "UnityCG.cginc"
 
-		// テクスチャ
-		sampler2D _MainTex;
+		struct BlockElement {
+			int X;
+			int Y;
+			int LifePoint;
+		};
 
-	// 弾の構造体
-	struct State
-	{
-		float3 Pos;
-		float3 Velocity;
-		float Radius;
-		int Enable;
-		int IsDead;
-	};
+	sampler2D _MainTex;
+	float4 BoxCenter;
+	float BoxAngle;
+	float BoxWidth;
+	float BoxHeight;
+	float DivideX;
+	float DivideY;
 
-	struct Option
-	{
-		float4 Col;
-	};
+	StructuredBuffer<BlockElement> BlockElements;
 
-	// 弾の構造化バッファ
-	StructuredBuffer<State> States;
-	StructuredBuffer<Option> Options;
-
-	// 頂点シェーダからの出力
 	struct VSOut {
 		float4 pos : SV_POSITION;
 		float2 tex : TEXCOORD0;
 		float4 col : COLOR;
-		float radius : RADIUS;
+		int x : BLOCK_X;
+		int y : BLOCK_Y;
 	};
 
 	// 頂点シェーダ
 	VSOut vert(uint id : SV_VertexID)
 	{
-		// idを元に、弾の情報を取得
 		VSOut output;
-		output.pos = float4(States[id].Pos, 1);
+		output.pos = BoxCenter + float4(0, 0, 0, 1);
 		output.tex = float2(0, 0);
-		output.col = float4(0, 0, 0, 0);
-		if (States[id].Enable) {
-			output.col = Options[id].Col;
+		output.col = float4(1, 1, 1, 1);
+		if (BlockElements[id].LifePoint <= 0) {
+			output.col = float4(0, 0, 0, 0);
 		}
-		output.radius = States[id].Radius;
+		output.x = BlockElements[id].X;
+		output.y = BlockElements[id].Y;
 		return output;
 	}
 
@@ -74,33 +68,31 @@
 
 		VSOut output;
 
-		// 全ての頂点で共通の値を計算しておく
 		float4 pos = input[0].pos;
 		float4 col = input[0].col;
+		float s = sin(BoxAngle);
+		float c = cos(BoxAngle);
 
-		// 四角形になるように頂点を生産
-		for (int x = 0; x < 2; x++)
+		for (int i = 0; i < 2; i++)
 		{
-			for (int y = 0; y < 2; y++)
+			for (int j = 0; j < 2; j++)
 			{
-				// ビルボード用の行列
-				float4x4 billboardMatrix = UNITY_MATRIX_V;
-				billboardMatrix._m03 =
-					billboardMatrix._m13 =
-					billboardMatrix._m23 =
-					billboardMatrix._m33 = 0;
+				int x = input[0].x + i;
+				int y = input[0].y + j;
 
-				// テクスチャ座標
-				float2 tex = float2(x, y);
+				float2 tex = float2(x*DivideX,y*DivideY);
 				output.tex = tex;
 
 				// 頂点位置を計算
-				output.pos = pos + mul(float4((tex * 2 - float2(1, 1)) * input[0].radius, 0, 1), billboardMatrix);
+				float2 localPos = float2((tex.x - 0.5f) * BoxWidth, (tex.y - 0.5f) * BoxHeight);
+				float2 rotatePos = float2(localPos.x * c - localPos.y*s, localPos.x*s + localPos.y*c);
+				output.pos = pos + float4(rotatePos, 0, 0);
 				output.pos = mul(UNITY_MATRIX_VP, output.pos);
 
 				// その他の値も設定
 				output.col = col;
-				output.radius = input[0].radius;
+				output.x = input[0].x;
+				output.y = input[0].y;
 
 				// ストリームに頂点を追加
 				outStream.Append(output);

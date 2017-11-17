@@ -46,7 +46,7 @@ namespace Stool.MilllionBullets.Sample
             ColorBallBuffer.Render();
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             ColorBallBuffer.Release();
         }

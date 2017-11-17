@@ -10,6 +10,7 @@ namespace Stool.MilllionBullets.Sample
         [SerializeField] private ColorBallFunctions _colorBallFunctions;
         [SerializeField] private ColorBallFunctions _colorBallFunctions2;
         [SerializeField] private MillionBulletsBoxCollider[] _boxColliders;
+        [SerializeField] private MillionBulletsBlocksCollider[] _blocksColliders;
 
         public BulletsBuffer<ColorBallOption> ColorBallBuffer { get; private set; }
         public BulletsBuffer<ColorBallOption> ColorBallBuffer2 { get; private set; }
@@ -31,6 +32,10 @@ namespace Stool.MilllionBullets.Sample
             {
                 BulletsCollision.Searcher.CheckBoxCollision(boxCollider);
             }
+            foreach (var blocksCollider in _blocksColliders)
+            {
+                BulletsCollision.Searcher.CheckBlocksCollision(blocksCollider);
+            }
         }
 
         void OnRenderObject()
@@ -39,7 +44,7 @@ namespace Stool.MilllionBullets.Sample
             ColorBallBuffer2.Render();
         }
 
-        void OnDisable()
+        void OnDestroy()
         {
             ColorBallBuffer.Release();
             ColorBallBuffer2.Release();
