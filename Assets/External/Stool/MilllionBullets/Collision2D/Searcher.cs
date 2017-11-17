@@ -7,6 +7,8 @@ namespace Stool.MilllionBullets.Collision2D
 {
     class Searcher
     {
+        public enum BoxColliderMode { Normal, PlayerBar };
+
         private CommonData _common;
         private ComputeShader _computeShader;
 
@@ -19,7 +21,7 @@ namespace Stool.MilllionBullets.Collision2D
         }
 
         private int _boxKernelId = 0;
-        public void CheckBoxCollision(MillionBulletsBoxCollider boxCollider)
+        public void CheckBoxCollision(MillionBulletsBoxCollider boxCollider, BoxColliderMode mode = BoxColliderMode.Normal)
         {
             var box = boxCollider.GetBox();
             foreach (var buffer in _common.BulletsBuffers)
@@ -31,6 +33,7 @@ namespace Stool.MilllionBullets.Collision2D
                 _computeShader.SetFloat("BoxAngle", box.Angle);
                 _computeShader.SetFloat("BoxWidth", box.Width);
                 _computeShader.SetFloat("BoxHeight", box.Height);
+                _computeShader.SetInt("NotBackReflection", mode== BoxColliderMode.PlayerBar ? 1:0);
                 _computeShader.SetBuffer(kernel, "States", buffer);
 
                 _computeShader.Dispatch(kernel, (buffer.count - 1) / ThreadNum + 1, 1, 1);
@@ -38,7 +41,7 @@ namespace Stool.MilllionBullets.Collision2D
         }
 
         private int _blocksKernelId = 0;
-        public void CheckBlocksCollision(MillionBulletsBlocksCollider blocksCollider)
+        public void CheckBlocksCollision(MillionBulletsBlocksCollider blocksCollider, BoxColliderMode mode = BoxColliderMode.Normal)
         {
             var info = blocksCollider.GetBlocksInfo();
             var box = blocksCollider.GetBox();
@@ -53,6 +56,7 @@ namespace Stool.MilllionBullets.Collision2D
             _computeShader.SetFloat("DivideY", 1.0f / info.ArrayHeight);
             _computeShader.SetInt("ArrayWidth", info.ArrayWidth);
             _computeShader.SetInt("ArrayHeight", info.ArrayHeight);
+            _computeShader.SetInt("NotBackReflection", mode == BoxColliderMode.PlayerBar ? 1 : 0);
             _computeShader.SetBuffer(kernel,"BlockElements", blocksCollider.BlockElementsBuffer);
 
             foreach (var buffer in _common.BulletsBuffers)

@@ -55,11 +55,11 @@ class MillionBulletsManager : MonoBehaviour
         ColorBallBuffer.Update(Time.deltaTime);
         foreach (var collider in _blocksColliders)
         {
-            _bulletsCollision.Searcher.CheckBlocksCollision(collider);
+            _bulletsCollision.Searcher.CheckBlocksCollision(collider, collider.mode);
         }
         foreach (var collider in _boxColliders)
         {
-            _bulletsCollision.Searcher.CheckBoxCollision(collider);
+            _bulletsCollision.Searcher.CheckBoxCollision(collider, collider.mode);
         }
     }
 

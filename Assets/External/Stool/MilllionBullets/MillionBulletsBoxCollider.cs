@@ -8,6 +8,7 @@ namespace Stool.MilllionBullets
     [RequireComponent(typeof(BoxCollider2D))]
     class MillionBulletsBoxCollider : MonoBehaviour
     {
+        public Searcher.BoxColliderMode mode;
         private BoxCollider2D _boxCollider;
         
         public BoxData GetBox()

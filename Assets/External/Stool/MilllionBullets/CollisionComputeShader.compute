@@ -32,6 +32,7 @@ float DivideX;
 float DivideY;
 int ArrayWidth;
 int ArrayHeight;
+int NotBackReflection;
 
 struct CollisionData
 {
@@ -60,6 +61,9 @@ CollisionData _CheckBoxCollision(
 	float sqrDistance = xdist * xdist + ydist * ydist;
 
 	CollisionData ret;
+	ret.NextVelocity = float3(0, 0, 0);
+	ret.NextPosition = float3(0, 0, 0);
+	ret.Distance = 0;
 	ret.IsHit = sqrDistance < radius * radius;
 
 	if (ret.IsHit)
@@ -80,12 +84,11 @@ CollisionData _CheckBoxCollision(
 		ret.NextVelocity = velocity + reflectDir * d * -2;
 		ret.NextPosition = bulletCenter + reflectDir * min(max(ydistRaw, xdistRaw) - radius, 0) * -1;
 		ret.Distance = max(ydistRaw, xdistRaw);
-	}
-	else
-	{
-		ret.NextVelocity = float3(0, 0, 0);
-		ret.NextPosition = float3(0, 0, 0);
-		ret.Distance = 0;
+
+		if (localDir.y < 0.00001 && NotBackReflection)
+		{
+			ret.IsHit = false;
+		}
 	}
 	return ret;
 }
