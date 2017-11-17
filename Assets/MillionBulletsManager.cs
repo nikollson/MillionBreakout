@@ -8,7 +8,7 @@ class MillionBulletsManager : MonoBehaviour
 {
     [SerializeField] private ComputeShader _collisionComputeShader;
     [SerializeField] private ComputeShader _emptyIndexComputeShader;
-    [SerializeField] private ColorBallFunctions _colorBallFunctions;
+    public ColorBallFunctions ColorBallFunctions;
 
     public static MillionBulletsManager Instance { get; private set; }
 
@@ -24,19 +24,21 @@ class MillionBulletsManager : MonoBehaviour
         _blocksColliders = new List<MillionBulletsBlocksCollider>();
         _boxColliders = new List<MillionBulletsBoxCollider>();
         _bulletsCollision = new BulletsCollision(_collisionComputeShader);
-        ColorBallBuffer = new BulletsBuffer<ColorBallOption>(_colorBallFunctions, _emptyIndexComputeShader);
+        ColorBallBuffer = new BulletsBuffer<ColorBallOption>(ColorBallFunctions, _emptyIndexComputeShader);
 
-        int N = _colorBallFunctions.GetLength();
+        /*
+        int N = ColorBallFunctions.GetLength();
         var states = new BulletState[N];
         var options = new ColorBallOption[N];
         for (int i = 0; i < N; i++)
         {
             states[i] = new BulletState(
-                this.transform.position, new Vector3(Random.Range(-1.0f,1.0f),Random.Range(0.5f,1.5f),0), _colorBallFunctions.GetRadius());
+                this.transform.position, new Vector3(Random.Range(-1.0f,1.0f),Random.Range(0.5f,1.5f),0), ColorBallFunctions.GetRadius());
             options[i] = new ColorBallOption(Color.white);
         }
-
         ColorBallBuffer.Adder.AddBullets(states,options);
+        */
+
         _bulletsCollision.Adder.AddBuffer(ColorBallBuffer);
     }
 

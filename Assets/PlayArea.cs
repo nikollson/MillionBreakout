@@ -10,8 +10,8 @@ public class PlayArea : MonoBehaviour {
         {
             touchPos = Input.touches[0].position;
         }
-        touchPos.z = 10;
         var camera = ButtleSystem.Instance.Camera;
+        touchPos.z = -camera.transform.position.z;
         var movePos = camera.ScreenToWorldPoint(touchPos);
 
         ButtleSystem.Instance.PlayerBar.SetMovePosition_Touch(movePos);

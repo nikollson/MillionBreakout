@@ -7,6 +7,8 @@ class ButtleSystem : MonoBehaviour
 
     public Camera Camera;
     public PlayerBar PlayerBar;
+    public UnitMaker UnitMaker;
+    public ParameterManager ParameterManager;
 
     void Awake()
     {
