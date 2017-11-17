@@ -1,5 +1,7 @@
-﻿#pragma kernel CheckBoxCollision
-#pragma kernel CheckBlocksCollision
+﻿#pragma kernel CheckBoxCollision0
+#pragma kernel CheckBoxCollision1
+#pragma kernel CheckBlocksCollision0
+#pragma kernel CheckBlocksCollision1
 
 #define THREADS 32
 
@@ -89,7 +91,7 @@ CollisionData _CheckBoxCollision(
 }
 
 [numthreads(THREADS, 1, 1)]
-void CheckBoxCollision(int3 id : SV_DispatchThreadID)
+void CheckBoxCollision0(int3 id : SV_DispatchThreadID)
 {
 	if (States[id.x].Enable == 0)return;
 
@@ -102,9 +104,14 @@ void CheckBoxCollision(int3 id : SV_DispatchThreadID)
 		States[id.x].Pos = collisionData.NextPosition;
 	}
 }
+[numthreads(THREADS, 1, 1)]
+void CheckBoxCollision1(int3 id : SV_DispatchThreadID)
+{
+	CheckBoxCollision0(id);
+}
 
 [numthreads(THREADS, 1, 1)]
-void CheckBlocksCollision(int3 id : SV_DispatchThreadID)
+void CheckBlocksCollision0(int3 id : SV_DispatchThreadID)
 {
 	if (States[id.x].Enable == 0)return;
 
@@ -147,3 +154,8 @@ void CheckBlocksCollision(int3 id : SV_DispatchThreadID)
 }
 
 
+
+[numthreads(THREADS, 1, 1)]
+void CheckBlocksCollision1(int3 id : SV_DispatchThreadID) {
+	CheckBlocksCollision0(id);
+}

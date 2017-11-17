@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -17,27 +18,32 @@ namespace Stool.MilllionBullets.Collision2D
             _computeShader = computeShader;
         }
 
+        private int _boxKernelId = 0;
         public void CheckBoxCollision(MillionBulletsBoxCollider boxCollider)
         {
             var box = boxCollider.GetBox();
-            int kernel = _computeShader.FindKernel("CheckBoxCollision");
-
             foreach (var buffer in _common.BulletsBuffers)
             {
+                int kernel = _computeShader.FindKernel("CheckBoxCollision"+_boxKernelId);
+                _boxKernelId = (_boxKernelId + 1) % 2;
+
                 _computeShader.SetVector("BoxCenter", box.Center);
                 _computeShader.SetFloat("BoxAngle", box.Angle);
                 _computeShader.SetFloat("BoxWidth", box.Width);
                 _computeShader.SetFloat("BoxHeight", box.Height);
                 _computeShader.SetBuffer(kernel, "States", buffer);
+
                 _computeShader.Dispatch(kernel, (buffer.count - 1) / ThreadNum + 1, 1, 1);
             }
         }
 
+        private int _blocksKernelId = 0;
         public void CheckBlocksCollision(MillionBulletsBlocksCollider blocksCollider)
         {
             var info = blocksCollider.GetBlocksInfo();
             var box = blocksCollider.GetBox();
-            int kernel = _computeShader.FindKernel("CheckBlocksCollision");
+            int kernel = _computeShader.FindKernel("CheckBlocksCollision"+_blocksKernelId);
+            _blocksKernelId = (_blocksKernelId + 1) % 2;
 
             _computeShader.SetVector("BoxCenter", box.Center);
             _computeShader.SetFloat("BoxAngle", box.Angle);

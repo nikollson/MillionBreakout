@@ -37,8 +37,7 @@
 		float4 pos : SV_POSITION;
 		float2 tex : TEXCOORD0;
 		float4 col : COLOR;
-		int x : BLOCK_X;
-		int y : BLOCK_Y;
+		float id : ELEMENTID;
 	};
 
 	// 頂点シェーダ
@@ -51,8 +50,11 @@
 		if (BlockElements[id].LifePoint <= 0) {
 			output.col = float4(0, 0, 0, 0);
 		}
+		output.id = id;
+		/*
 		output.x = BlockElements[id].X;
 		output.y = BlockElements[id].Y;
+		*/
 		return output;
 	}
 
@@ -72,13 +74,17 @@
 		float4 col = input[0].col;
 		float s = sin(BoxAngle);
 		float c = cos(BoxAngle);
+		int id = (int)(input[0].id+0.1f);
+		int basex = BlockElements[id].X;
+		int basey = BlockElements[id].Y;
 
 		for (int i = 0; i < 2; i++)
 		{
 			for (int j = 0; j < 2; j++)
 			{
-				int x = input[0].x + i;
-				int y = input[0].y + j;
+
+				int x = basex + i;
+				int y = basey + j;
 
 				float2 tex = float2(x*DivideX,y*DivideY);
 				output.tex = tex;
@@ -91,8 +97,7 @@
 
 				// その他の値も設定
 				output.col = col;
-				output.x = input[0].x;
-				output.y = input[0].y;
+				output.id = input[0].id;
 
 				// ストリームに頂点を追加
 				outStream.Append(output);
