@@ -8,8 +8,15 @@ namespace Stool.MilllionBullets
     [RequireComponent(typeof(BoxCollider2D))]
     class MillionBulletsBoxCollider : MonoBehaviour
     {
+        public int HitCount { get; private set; }
         public Searcher.BoxColliderMode mode;
         private BoxCollider2D _boxCollider;
+        [SerializeField] private int _destroyDamage = 0;
+
+        void Awake()
+        {
+            HitCount = 0;
+        }
         
         public BoxData GetBox()
         {
@@ -31,6 +38,22 @@ namespace Stool.MilllionBullets
                 _boxCollider = GetComponent<BoxCollider2D>();
             }
             return _boxCollider;
+        }
+
+        public void OverDeadLine(int overBlockCount)
+        {
+            ButtleSystem.Instance.ParameterManager.HPAdd(-_destroyDamage * overBlockCount);
+        }
+
+        public void AddHitCount(int val)
+        {
+            HitCount += val;
+            OnAddHitCount(val);
+        }
+
+        protected virtual void OnAddHitCount(int val)
+        {
+            
         }
     }
 

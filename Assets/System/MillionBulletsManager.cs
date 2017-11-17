@@ -26,20 +26,8 @@ class MillionBulletsManager : MonoBehaviour
         _bulletsCollision = new BulletsCollision(_collisionComputeShader);
         ColorBallBuffer = new BulletsBuffer<ColorBallOption>(ColorBallFunctions, _emptyIndexComputeShader);
 
-        /*
-        int N = ColorBallFunctions.GetLength();
-        var states = new BulletState[N];
-        var options = new ColorBallOption[N];
-        for (int i = 0; i < N; i++)
-        {
-            states[i] = new BulletState(
-                this.transform.position, new Vector3(Random.Range(-1.0f,1.0f),Random.Range(0.5f,1.5f),0), ColorBallFunctions.GetRadius());
-            options[i] = new ColorBallOption(Color.white);
-        }
-        ColorBallBuffer.Adder.AddBullets(states,options);
-        */
-
         _bulletsCollision.Adder.AddBuffer(ColorBallBuffer);
+        AddDeadLineBalls();
     }
 
     public void AddBlocksCollider(MillionBulletsBlocksCollider collider)
@@ -57,10 +45,12 @@ class MillionBulletsManager : MonoBehaviour
         ColorBallBuffer.Update(Time.deltaTime);
         foreach (var collider in _blocksColliders)
         {
+            if (collider == null||collider.gameObject==null) continue;
             _bulletsCollision.Searcher.CheckBlocksCollision(collider, collider.mode);
         }
         foreach (var collider in _boxColliders)
         {
+            if (collider == null||collider.gameObject==null) continue;
             _bulletsCollision.Searcher.CheckBoxCollision(collider, collider.mode);
         }
     }
@@ -73,5 +63,25 @@ class MillionBulletsManager : MonoBehaviour
     void OnDestroy()
     {
         ColorBallBuffer.Release();
+        _bulletsCollision.Release();
+    }
+
+    void AddDeadLineBalls()
+    {
+        int N = 30;
+        var states = new BulletState[N];
+        var options = new ColorBallOption[N];
+        var width = ButtleSystem.Instance.Stage.Width * 0.98f;
+        var center = ButtleSystem.Instance.Stage.Center;
+
+        for (int i = 0; i < N; i++)
+        {
+            var x = center.x + i * width / N - width / 2;
+            var y = ButtleSystem.Instance.Stage.EnemyDeadLineY - Random.Range(0,0.4f);
+            states[i] = new BulletState(
+                new Vector2(x,y), Vector3.zero, ColorBallFunctions.GetRadius());
+            options[i] = new ColorBallOption(Color.red);
+        }
+        ColorBallBuffer.Adder.AddBullets(states,options);
     }
 }

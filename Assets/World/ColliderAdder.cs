@@ -12,6 +12,7 @@ public class ColliderAdder : MonoBehaviour {
         if (blocksCollider != null)
         {
             MillionBulletsManager.Instance.AddBlocksCollider(blocksCollider);
+            return;
         }
         if (boxCollider != null)
         {

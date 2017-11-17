@@ -23,6 +23,7 @@ struct BlockElement
 
 RWStructuredBuffer<State> States;
 RWStructuredBuffer<BlockElement> BlockElements;
+RWStructuredBuffer<int> InoutInt;
 
 float3 BoxCenter;
 float BoxAngle;
@@ -33,6 +34,8 @@ float DivideY;
 int ArrayWidth;
 int ArrayHeight;
 int NotBackReflection;
+int EraseBall;
+float DeadLineY;
 
 struct CollisionData
 {
@@ -105,6 +108,13 @@ void CheckBoxCollision0(int3 id : SV_DispatchThreadID)
 	if (collisionData.IsHit) {
 		States[id.x].Velocity = collisionData.NextVelocity;
 		States[id.x].Pos = collisionData.NextPosition;
+
+		if (EraseBall) States[id.x].Enable = 0;
+		InterlockedAdd(InoutInt[0], 1);
+		if (collisionData.NextPosition.y <= DeadLineY)
+		{
+			InterlockedAdd(InoutInt[1], 1);
+		}
 	}
 }
 [numthreads(THREADS, 1, 1)]
@@ -112,6 +122,7 @@ void CheckBoxCollision1(int3 id : SV_DispatchThreadID)
 {
 	CheckBoxCollision0(id);
 }
+
 
 [numthreads(THREADS, 1, 1)]
 void CheckBlocksCollision0(int3 id : SV_DispatchThreadID)
@@ -146,13 +157,24 @@ void CheckBlocksCollision0(int3 id : SV_DispatchThreadID)
 				{
 					result = collisionData;
 				}
+				InterlockedAdd(InoutInt[0], 1);
 			}
 		}
 	}
+
 	if (result.IsHit)
 	{
 		States[id.x].Velocity = result.NextVelocity;
 		States[id.x].Pos = result.NextPosition;
+
+		if (EraseBall)
+		{
+			States[id.x].Enable = 0;
+		}
+		if (result.NextPosition.y <= DeadLineY) 
+		{
+			InterlockedAdd(InoutInt[1], 1);
+		}
 	}
 }
 

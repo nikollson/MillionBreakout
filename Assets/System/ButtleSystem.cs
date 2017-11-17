@@ -9,6 +9,7 @@ class ButtleSystem : MonoBehaviour
     public PlayerBar PlayerBar;
     public UnitMaker UnitMaker;
     public ParameterManager ParameterManager;
+    public Stage Stage;
 
     void Awake()
     {

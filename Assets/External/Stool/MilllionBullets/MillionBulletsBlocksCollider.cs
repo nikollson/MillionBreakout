@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -7,17 +8,28 @@ namespace Stool.MilllionBullets
 {
     class MillionBulletsBlocksCollider : MillionBulletsBoxCollider
     {
+        public enum LifeCalucuration
+        {
+            Auto, Corrective
+        }
+
+        [SerializeField] private LifeCalucuration _lifeCalucuration;
         [SerializeField] private int _arrayWidth = 1;
         [SerializeField] private int _arrayHeight = 1;
         [SerializeField] private int _lifePoint = 1;
+        [SerializeField] private int _coinPerBlock = 5;
         [Multiline(10)]
         [SerializeField] private string _form;
 
         public ComputeBuffer BlockElementsBuffer { get; private set; }
 
+        private int _lifeSum;
+        private BlockElement[] _blocksElementArray;
+
         private void Awake()
         {
             var lifeArray = GetLifeArray();
+            _lifeSum = lifeArray.Sum();
             var elements = new BlockElement[lifeArray.Length];
             for (int i = 0; i < elements.Length; i++)
             {
@@ -25,6 +37,7 @@ namespace Stool.MilllionBullets
             }
             BlockElementsBuffer = new ComputeBuffer(elements.Length, Marshal.SizeOf(typeof(BlockElement)));
             BlockElementsBuffer.SetData(elements);
+            _blocksElementArray = new BlockElement[BlockElementsBuffer.count];
         }
 
         private void OnDestroy()
@@ -55,6 +68,28 @@ namespace Stool.MilllionBullets
                 }
             }
             return array;
+        }
+
+        protected override void OnAddHitCount(int val)
+        {
+            ButtleSystem.Instance.ParameterManager.CoinAdd(val*_coinPerBlock);
+
+            int currentLife = Mathf.Max(0, _lifeSum - HitCount);
+            if (_lifeCalucuration == LifeCalucuration.Corrective)
+            {
+                currentLife = CorrectiveLifeCalucurate();
+            }
+            if (currentLife == 0)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+
+        private int CorrectiveLifeCalucurate()
+        {
+            BlockElementsBuffer.GetData(_blocksElementArray);
+            int sum = _blocksElementArray.Select(x => x.LifePoint).Sum();
+            return sum;
         }
     }
 

@@ -55,6 +55,22 @@ namespace Stool.CodingSupport
             }
             return ret;
         }
+
+        public static void Fill<T>(this T[] a, T value)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                a[i] = value;
+            }
+        }
+
+        public static void Fill<T>(this List<T> a, T value)
+        {
+            for (int i = 0; i < a.Count; i++)
+            {
+                a[i] = value;
+            }
+        }
     }
 }
 
