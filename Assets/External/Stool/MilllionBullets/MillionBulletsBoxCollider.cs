@@ -11,7 +11,6 @@ namespace Stool.MilllionBullets
         public int HitCount { get; private set; }
         public Searcher.BoxColliderMode mode;
         private BoxCollider2D _boxCollider;
-        [SerializeField] private int _destroyDamage = 0;
 
         void Awake()
         {
@@ -39,11 +38,7 @@ namespace Stool.MilllionBullets
             }
             return _boxCollider;
         }
-
-        public void OverDeadLine(int overBlockCount)
-        {
-            ButtleSystem.Instance.ParameterManager.HPAdd(-_destroyDamage * overBlockCount);
-        }
+        
 
         public void AddHitCount(int val)
         {

@@ -17,7 +17,6 @@ namespace Stool.MilllionBullets
         [SerializeField] private int _arrayWidth = 1;
         [SerializeField] private int _arrayHeight = 1;
         [SerializeField] private int _lifePoint = 1;
-        [SerializeField] private int _coinPerBlock = 5;
         [Multiline(10)]
         [SerializeField] private string _form;
 
@@ -72,8 +71,6 @@ namespace Stool.MilllionBullets
 
         protected override void OnAddHitCount(int val)
         {
-            ButtleSystem.Instance.ParameterManager.CoinAdd(val*_coinPerBlock);
-
             int currentLife = Mathf.Max(0, _lifeSum - HitCount);
             if (_lifeCalucuration == LifeCalucuration.Corrective)
             {

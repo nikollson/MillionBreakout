@@ -22,7 +22,7 @@ namespace Stool.MilllionBullets.Sample
             cnt += 1;
             if (cnt % 50 == 0)
             {
-                int len = Mathf.Min(10, ColorBallBuffer.GetRestAddlessSize());
+                int len = ColorBallBuffer.GetRestAddlessSize();
                 var states = new BulletState[len];
                 var options = new ColorBallOption[len];
                 for (int i = 0; i < len; i++)

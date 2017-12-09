@@ -40,7 +40,6 @@ namespace Stool.MilllionBullets.Collision2D
             _computeShader.SetInt("NotBackReflection", mode == BoxColliderMode.PlayerBar ? 1 : 0);
             _computeShader.SetInt("EraseBall", mode == BoxColliderMode.EraseBall ? 1 : 0);
             _computeShader.SetBuffer(kernel, "InoutInt", _inoutIntBuffer);
-            _computeShader.SetFloat("DeadLineY", ButtleSystem.Instance.Stage.EnemyDeadLineY);
 
             _inoutIntArray.Fill(0);
             _inoutIntBuffer.SetData(_inoutIntArray);
@@ -53,10 +52,6 @@ namespace Stool.MilllionBullets.Collision2D
 
             _inoutIntBuffer.GetData(_inoutIntArray);
             boxCollider.AddHitCount(_inoutIntArray[0]);
-            if (_inoutIntArray[1] != 0)
-            {
-                boxCollider.OverDeadLine(_inoutIntArray[1]);
-            }
         }
 
         private int _blocksKernelId = 0;
@@ -77,7 +72,6 @@ namespace Stool.MilllionBullets.Collision2D
             _computeShader.SetInt("ArrayHeight", info.ArrayHeight);
             _computeShader.SetInt("NotBackReflection", mode == BoxColliderMode.PlayerBar ? 1 : 0);
             _computeShader.SetInt("EraseBall", mode == BoxColliderMode.EraseBall ? 1 : 0);
-            _computeShader.SetFloat("DeadLineY", ButtleSystem.Instance.Stage.EnemyDeadLineY);
 
             _computeShader.SetBuffer(kernel, "InoutInt", _inoutIntBuffer);
             _computeShader.SetBuffer(kernel,"BlockElements", blocksCollider.BlockElementsBuffer);
@@ -93,10 +87,6 @@ namespace Stool.MilllionBullets.Collision2D
 
             _inoutIntBuffer.GetData(_inoutIntArray);
             blocksCollider.AddHitCount(_inoutIntArray[0]);
-            if (_inoutIntArray[1] != 0)
-            {
-                blocksCollider.OverDeadLine(_inoutIntArray[1]);
-            }
         }
 
         public void Release()

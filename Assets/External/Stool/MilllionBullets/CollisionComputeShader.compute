@@ -35,7 +35,7 @@ int ArrayWidth;
 int ArrayHeight;
 int NotBackReflection;
 int EraseBall;
-float DeadLineY;
+
 
 struct CollisionData
 {
@@ -111,10 +111,6 @@ void CheckBoxCollision0(int3 id : SV_DispatchThreadID)
 
 		if (EraseBall) States[id.x].Enable = 0;
 		InterlockedAdd(InoutInt[0], 1);
-		if (collisionData.NextPosition.y <= DeadLineY)
-		{
-			InterlockedAdd(InoutInt[1], 1);
-		}
 	}
 }
 [numthreads(THREADS, 1, 1)]
@@ -170,10 +166,6 @@ void CheckBlocksCollision0(int3 id : SV_DispatchThreadID)
 		if (EraseBall)
 		{
 			States[id.x].Enable = 0;
-		}
-		if (result.NextPosition.y <= DeadLineY) 
-		{
-			InterlockedAdd(InoutInt[1], 1);
 		}
 	}
 }

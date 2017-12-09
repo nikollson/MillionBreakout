@@ -30,10 +30,12 @@ namespace Stool.MilllionBullets.Sample
             UpdateBuffer();
             foreach (var boxCollider in _boxColliders)
             {
+                if(boxCollider==null)continue;
                 BulletsCollision.Searcher.CheckBoxCollision(boxCollider);
             }
             foreach (var blocksCollider in _blocksColliders)
             {
+                if(blocksCollider==null)continue;
                 BulletsCollision.Searcher.CheckBlocksCollision(blocksCollider);
             }
         }
