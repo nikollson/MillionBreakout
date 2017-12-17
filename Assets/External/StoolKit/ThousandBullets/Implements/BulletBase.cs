@@ -1,0 +1,7 @@
+﻿
+namespace Stool
+{
+    class BulletBase
+    {
+    }
+}
