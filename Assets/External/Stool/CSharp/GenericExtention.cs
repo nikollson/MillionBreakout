@@ -5,13 +5,27 @@ namespace Stool.CSharp
 {
     static class GenericExtention
     {
-        public static void RemoveFromHashSet<T>(this LinkedList<T> list, HashSet<T> hashSet)
+        public static void RemoveNodeFromHashSet<T>(this LinkedList<T> list, HashSet<T> hashSet)
         {
             var current = list.First;
             while (current != null)
             {
                 var next = current.Next;
                 if (hashSet.Contains(current.Value))
+                {
+                    list.Remove(current);
+                }
+                current = next;
+            }
+        }
+
+        public static void RemoveNodeIf<T>(this LinkedList<T> list, Func<T, bool> judgeFunc)
+        {
+            var current = list.First;
+            while (current != null)
+            {
+                var next = current.Next;
+                if (judgeFunc(current.Value))
                 {
                     list.Remove(current);
                 }
