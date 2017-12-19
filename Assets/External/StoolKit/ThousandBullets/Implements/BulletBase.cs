@@ -1,7 +1,0 @@
-﻿
-namespace Stool
-{
-    class BulletBase
-    {
-    }
-}

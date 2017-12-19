@@ -3,11 +3,9 @@ using UnityEngine;
 
 namespace Stool.SceneManagement
 {
-    interface IRecycleInstanciateSetting
+    interface IRecycleInstanceController
     {
-        GameObject GetDefaltPrefab();
         void SetData(GameObject gameObject);
         void ClearData(GameObject gameObject);
-        bool IsEnable();
     }
 }
