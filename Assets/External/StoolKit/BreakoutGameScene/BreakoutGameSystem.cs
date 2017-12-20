@@ -33,7 +33,7 @@ namespace StoolKit.BreakoutGameScene
 
                 if (i == 0)
                 {
-                    radius = 1.9f;
+                    radius = 1.1f;
                 }
 
                 var ball = new BreakoutBallBehaviour(radius, speed, tex);
@@ -42,8 +42,8 @@ namespace StoolKit.BreakoutGameScene
                 CircleCollisionManager.AddCollider(ball);
             }
 
-            CircleCollisionManager.UpdateColliderInfo();
-            Debug.Log(CircleCollisionManager.Dump());
+            CircleCollisionManager.RefreshColliderInfo();
+
         }
 
         private Vector2 RangeVector(Vector2 min, Vector2 max)
