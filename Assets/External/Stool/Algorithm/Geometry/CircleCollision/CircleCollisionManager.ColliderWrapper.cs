@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,16 +7,15 @@ namespace Stool.Algorithm.Geometry
 {
 	partial class CircleCollisionManager
 	{
-		class ColliderWrapper : IComparer
+		class ColliderWrapper : IComparable<ColliderWrapper>
 		{
-			private ICircleCollider _collider;
-
+			public ICircleCollider Collider { get; private set; }
 			public bool Removed { get; private set; }
 			public int ZOrder { get; private set; }
 
 			public ColliderWrapper(ICircleCollider collider)
 			{
-				_collider = collider;
+				Collider = collider;
 			}
 
 			public void SetRemove()
@@ -25,18 +25,15 @@ namespace Stool.Algorithm.Geometry
 
 		    public void UpdateZOrder(CircleCollisionSetting setting)
 		    {
-		        ZOrder = ZOrderCalculater.GetZOrder(_collider, setting);
+		        ZOrder = ZOrderCalculater.GetZOrder(Collider, setting);
 		    }
 
-		    public int Compare(object argx, object argy)
+		    public int CompareTo(ColliderWrapper x)
 		    {
-		        var x = (ColliderWrapper) argx;
-		        var y = (ColliderWrapper) argy;
+		        if (x.Removed) return -1;
+		        if (Removed) return 1;
 
-		        if (y == null || y.Removed) return -1;
-		        if (x == null || x.Removed) return 1;
-
-		        return x.ZOrder - y.ZOrder;
+		        return ZOrder - x.ZOrder;
 		    }
 		}
 	}

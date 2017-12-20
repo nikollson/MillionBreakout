@@ -25,6 +25,8 @@ namespace Stool.Algorithm.Geometry
         {
             _setting = setting;
             _zorderIndices = new ValuePair<int, int>[_setting.MaxZOrder];
+
+            for(int i=0;i<_zorderIndices.Length;i++)_zorderIndices[i] = new ValuePair<int, int>(0,0);
         }
 
         public void AddCollider(ICircleCollider collider)
@@ -46,13 +48,13 @@ namespace Stool.Algorithm.Geometry
         public void UpdateColliderInfo()
         {
             _colliders.ForEach(x => x.UpdateZOrder(_setting));
-
+            
             _colliders.Sort();
 
             foreach (var zorderIndex in _zorderIndices)
             {
-                zorderIndex.Item1 = 0;
-                zorderIndex.Item2 = 0;
+                zorderIndex.Item1 = -1;
+                zorderIndex.Item2 = -1;
             }
 
             for (int i = _colliders.Count - 1; i >= 0; i--)
@@ -69,6 +71,28 @@ namespace Stool.Algorithm.Geometry
                 _zorderIndices[zorder].Item1 = i;
                 _zorderIndices[zorder].Item2 = Math.Max(_zorderIndices[zorder].Item2, i + 1);
             }
+        }
+
+        public string Dump()
+        {
+            string ret = "";
+
+            for (int i = 0; i < _colliders.Count; i++)
+            {
+                var element = _colliders[i];
+                var pos = element.Collider.GetColliderCenter();
+                ret += "" + element.ZOrder + " : " + pos + "\n";
+            }
+
+            for (int i = 0; i < _zorderIndices.Length; i++)
+            {
+                var element = _zorderIndices[i];
+                if(element.Item1==-1)continue;
+                
+                ret += "(" + i + ":" + element.Item1 + ":" + element.Item2 + ")  ";
+            }
+
+            return ret;
         }
     }
 }

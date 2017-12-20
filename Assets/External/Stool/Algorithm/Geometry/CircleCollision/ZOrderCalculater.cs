@@ -21,6 +21,7 @@ namespace Stool.Algorithm.Geometry
                 Vector2 nextCenter = rect.Position - rect.Size / 4;
 
                 zorder *= 4;
+                zorder += 1;
                 if (toCircle.x >= 0)
                 {
                     zorder += 1;

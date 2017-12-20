@@ -10,21 +10,40 @@ namespace StoolKit.BreakoutGameScene
     class BreakoutGameSystem : MonoBehaviour
     {
         public ThousandBulletsManager ThousandBulletsManager;
-        private CircleCollisionManager _circleCollisionManager;
+        public CircleCollisionManager CircleCollisionManager { get; private set; }
+
+        public Vector2 areaCenter;
+        public float areaSize;
+        public int areaDepth;
 
         [SerializeField] private Setting _setting;
 
         public void Awake()
         {
-            for (int i = 0; i < 100; i++)
+            var circleColliderSetting = new CircleCollisionSetting(areaDepth, areaCenter, areaSize);
+
+            CircleCollisionManager = new CircleCollisionManager(circleColliderSetting);
+
+            for (int i = 0; i < 10; i++)
             {
                 var speed = RangeVector(_setting.speedMin, _setting.speedMax);
                 var position = RangeVector(_setting.positionMin, _setting.positionMax);
                 float radius = _setting.radius;
                 Texture2D tex = Random.Range(0, 2) >= 1 ? _setting.texture1 : _setting.texture2;
 
-                ThousandBulletsManager.AddBullet(new BreakoutBallBehaviour(radius, speed, tex), position,Quaternion.identity);
+                if (i == 0)
+                {
+                    radius = 1.9f;
+                }
+
+                var ball = new BreakoutBallBehaviour(radius, speed, tex);
+
+                ThousandBulletsManager.AddBullet(ball, position,Quaternion.identity);
+                CircleCollisionManager.AddCollider(ball);
             }
+
+            CircleCollisionManager.UpdateColliderInfo();
+            Debug.Log(CircleCollisionManager.Dump());
         }
 
         private Vector2 RangeVector(Vector2 min, Vector2 max)
