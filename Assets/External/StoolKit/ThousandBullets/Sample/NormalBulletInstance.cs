@@ -8,7 +8,6 @@ namespace StoolKit.ThousandBullets.Sample
     class NormalBulletInstance : ThousandBulletBehaviour
     {
         private int _count = 0;
-        private bool _isEnable = true;
         private Setting _setting;
 
         public NormalBulletInstance(Setting setting)
@@ -16,17 +15,17 @@ namespace StoolKit.ThousandBullets.Sample
             _setting = setting;
         }
 
-        public override Material GetInitalMaterial()
+        public override Material GetInitalBulletMaterial()
         {
             return _setting.Material;
         }
 
-        public override Texture2D GetInitialTexture()
+        public override Texture2D GetInitialBulletTexture()
         {
             return _setting.Texture;
         }
 
-        public override void Update()
+        public override void OnUpdateBullet()
         {
             _count++;
 
@@ -34,13 +33,8 @@ namespace StoolKit.ThousandBullets.Sample
 
             if (_count > 120)
             {
-                _isEnable = false;
+                DestroyThisBullet();
             }
-        }
-
-        public override bool IsEnable()
-        {
-            return _isEnable;
         }
 
         [Serializable]

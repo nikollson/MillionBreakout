@@ -1,5 +1,4 @@
 ﻿
-using System;
 using UnityEngine;
 
 namespace StoolKit.ThousandBullets
@@ -10,37 +9,52 @@ namespace StoolKit.ThousandBullets
         public MeshRenderer MeshRenderer { get { return _bulletPrefab.MeshRenderer; } }
 
         private ThousandBulletPrefab _bulletPrefab;
+        private bool _isEnable;
 
         public void SetPrefab(ThousandBulletPrefab bulletPrefab)
         {
             _bulletPrefab = bulletPrefab;
+            _isEnable = true;
         }
 
-        public virtual void Start()
+        public virtual void OnStartBullet()
         {
             
         }
 
-        public virtual void Update()
+        public virtual void OnUpdateBullet()
         {
             
         }
 
-        public virtual void End()
+        public virtual void OnEndBullet()
         {
             
         }
 
-        public virtual Material GetInitalMaterial()
+        public virtual float GetBulletRadius()
+        {
+            return 0.5f;
+        }
+
+        public virtual Material GetInitalBulletMaterial()
         {
             return null;
         }
 
-        public virtual Texture2D GetInitialTexture()
+        public virtual Texture2D GetInitialBulletTexture()
         {
             return null;
         }
 
-        public abstract bool IsEnable();
+        public void DestroyThisBullet()
+        {
+            _isEnable = false;
+        }
+
+        public bool IsEnable()
+        {
+            return _isEnable;
+        }
     }
 }

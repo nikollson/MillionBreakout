@@ -18,7 +18,7 @@ namespace StoolKit.MilllionBullets
 
         public virtual void UpdateBullets(ComputeBuffer bulletsBuffer, ComputeBuffer optionsBuffer)
         {
-            Debug.LogError("Not override Update");
+            Debug.LogError("Not override OnUpdateBullet");
         }
 
         public virtual int GetLength()

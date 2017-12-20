@@ -8,13 +8,13 @@ namespace UniRx.Triggers
     {
         Subject<Unit> update;
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         void Update()
         {
             if (update != null) update.OnNext(Unit.Default);
         }
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         public IObservable<Unit> UpdateAsObservable()
         {
             return update ?? (update = new Subject<Unit>());

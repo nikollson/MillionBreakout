@@ -10,6 +10,8 @@ namespace StoolKit.ThousandBullets
         public Material DefaultMaterial;
         public Texture2D DefaultTexture;
 
+        private float previousRaidus = 1.0f;
+
         public MeshRenderer MeshRenderer
         {
             get { return GetComponent<MeshRenderer>(); }
@@ -24,31 +26,46 @@ namespace StoolKit.ThousandBullets
             Initialize();
 
             _behaviour.SetPrefab(this);
-            _behaviour.Start();
+            _behaviour.OnStartBullet();
 
             MeshRenderer.enabled = true;
         }
 
         private void Initialize()
         {
-            var material = _behaviour.GetInitalMaterial();
+            var material = _behaviour.GetInitalBulletMaterial();
             if (material == null) material = DefaultMaterial;
             if (material.shader != MeshRenderer.material.shader)
             {
                 MeshRenderer.material = material;
             }
 
-            var texture = _behaviour.GetInitialTexture();
+            var texture = _behaviour.GetInitialBulletTexture();
             if (texture == null) texture = DefaultTexture;
             if (texture != MeshRenderer.material.mainTexture)
             {
                 MeshRenderer.material.mainTexture = texture;
             }
+
+            UpdateRadius();
+        }
+
+        private void UpdateRadius()
+        {
+            var radius = _behaviour.GetBulletRadius();
+            var expend = radius / previousRaidus;
+
+            if (expend != 1.0f)
+            {
+                transform.localScale = transform.localScale * expend;
+            }
+
+            previousRaidus = radius;
         }
 
         public void ClearBehaviour()
         {
-            _behaviour.End();
+            _behaviour.OnEndBullet();
             _behaviour = null;
 
             MeshRenderer.enabled = false;
@@ -63,7 +80,9 @@ namespace StoolKit.ThousandBullets
         public void Update()
         {
             if(_behaviour == null)return;
-            _behaviour.Update();
+            _behaviour.OnUpdateBullet();
+
+            UpdateRadius();
         }
     }
 }

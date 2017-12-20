@@ -36,8 +36,8 @@ namespace UniRx
 
 #if UNITY_EDITOR
 
-        // In UnityEditor's EditorMode can't instantiate and work MonoBehaviour.Update.
-        // EditorThreadDispatcher use EditorApplication.update instead of MonoBehaviour.Update.
+        // In UnityEditor's EditorMode can't instantiate and work MonoBehaviour.OnUpdateBullet.
+        // EditorThreadDispatcher use EditorApplication.update instead of MonoBehaviour.OnUpdateBullet.
         class EditorThreadDispatcher
         {
             static object gate = new object();

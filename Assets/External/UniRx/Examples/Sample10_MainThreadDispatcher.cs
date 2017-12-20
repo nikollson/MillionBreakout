@@ -27,7 +27,7 @@ namespace UniRx.Examples
             Observable.Interval(TimeSpan.FromSeconds(1))
                 .Subscribe(x => Debug.Log(x));
 
-            // Observable.Start use ThreadPool Scheduler as default.
+            // Observable.OnStartBullet use ThreadPool Scheduler as default.
             // ObserveOnMainThread return to mainthread
             Observable.Start(() => Unit.Default) // asynchronous work
                 .ObserveOnMainThread()

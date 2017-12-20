@@ -51,7 +51,7 @@ namespace StoolKit.MilllionBullets.Sample
 
         public override void UpdateBullets(ComputeBuffer statesBuffer, ComputeBuffer optionsBuffer)
         {
-            int kernel = _computeShader.FindKernel("Update");
+            int kernel = _computeShader.FindKernel("OnUpdateBullet");
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
             _computeShader.SetBuffer(kernel, "States", statesBuffer);
             _computeShader.SetBuffer(kernel, "Options", optionsBuffer);

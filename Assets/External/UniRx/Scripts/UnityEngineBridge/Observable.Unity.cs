@@ -31,7 +31,7 @@ namespace UniRx
         GameObjectUpdate,
         LateUpdate,
 #if SupportCustomYieldInstruction
-        /// <summary>[Obsolete]Same as Update</summary>
+        /// <summary>[Obsolete]Same as OnUpdateBullet</summary>
         [Obsolete]
         AfterUpdate
 #endif
@@ -662,7 +662,7 @@ namespace UniRx
         // variation of FromCoroutine
 
         /// <summary>
-        /// EveryUpdate calls coroutine's yield return null timing. It is after all Update and before LateUpdate.
+        /// EveryUpdate calls coroutine's yield return null timing. It is after all OnUpdateBullet and before LateUpdate.
         /// </summary>
         public static IObservable<long> EveryUpdate()
         {
@@ -693,7 +693,7 @@ namespace UniRx
         }
 
         /// <summary>
-        /// EveryGameObjectUpdate calls from MainThreadDispatcher's Update.
+        /// EveryGameObjectUpdate calls from MainThreadDispatcher's OnUpdateBullet.
         /// </summary>
         public static IObservable<long> EveryGameObjectUpdate()
         {
@@ -1008,7 +1008,7 @@ namespace UniRx
         //{
         //    switch (dispatchType)
         //    {
-        //        case MainThreadDispatchType.Update:
+        //        case MainThreadDispatchType.OnUpdateBullet:
         //            return source.SubscribeOnMainThread(); // faster path
 
         //        // others, bit slower

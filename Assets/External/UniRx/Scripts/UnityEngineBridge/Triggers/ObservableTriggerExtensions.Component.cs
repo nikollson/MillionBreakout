@@ -243,7 +243,7 @@ namespace UniRx.Triggers
 
         #region ObservableUpdateTrigger
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         public static IObservable<Unit> UpdateAsObservable(this Component component)
         {
             if (component == null || component.gameObject == null) return Observable.Empty<Unit>();

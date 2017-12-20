@@ -168,10 +168,10 @@ namespace UniRx
         /// <summary>Reset to default values.</summary>
         public virtual void Reset() { }
 
-        /// <summary>Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</summary>
+        /// <summary>OnStartBullet is called on the frame when a script is enabled just before any of the OnUpdateBullet methods is called the first time.</summary>
         public virtual void Start() { }
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         public virtual void Update() { }
 
 #if !(UNITY_METRO || UNITY_WP8 || UNITY_NACL_CHROME || UNITY_WEBGL)

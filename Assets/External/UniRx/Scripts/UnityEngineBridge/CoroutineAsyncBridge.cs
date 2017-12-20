@@ -21,7 +21,7 @@ namespace UniRx
             IsCompleted = false;
         }
 
-        public static CoroutineAsyncBridge Start<T>(T awaitTarget)
+        public static CoroutineAsyncBridge OnStartBullet<T>(T awaitTarget)
         {
             var bridge = new CoroutineAsyncBridge();
             MainThreadDispatcher.StartCoroutine(bridge.Run(awaitTarget));
@@ -58,7 +58,7 @@ namespace UniRx
             this.result = result;
         }
 
-        public static CoroutineAsyncBridge<T> Start(T awaitTarget)
+        public static CoroutineAsyncBridge<T> OnStartBullet(T awaitTarget)
         {
             var bridge = new CoroutineAsyncBridge<T>(awaitTarget);
             MainThreadDispatcher.StartCoroutine(bridge.Run(awaitTarget));
@@ -88,22 +88,22 @@ namespace UniRx
     {
         public static CoroutineAsyncBridge<WWW> GetAwaiter(this WWW www)
         {
-            return CoroutineAsyncBridge<WWW>.Start(www);
+            return CoroutineAsyncBridge<WWW>.OnStartBullet(www);
         }
 
         public static CoroutineAsyncBridge GetAwaiter(this Coroutine coroutine)
         {
-            return CoroutineAsyncBridge.Start(coroutine);
+            return CoroutineAsyncBridge.OnStartBullet(coroutine);
         }
 
         public static CoroutineAsyncBridge<AsyncOperation> GetAwaiter(this AsyncOperation asyncOperation)
         {
-            return CoroutineAsyncBridge<AsyncOperation>.Start(asyncOperation);
+            return CoroutineAsyncBridge<AsyncOperation>.OnStartBullet(asyncOperation);
         }
 
         public static CoroutineAsyncBridge GetAwaiter(this IEnumerator coroutine)
         {
-            return CoroutineAsyncBridge.Start(coroutine);
+            return CoroutineAsyncBridge.OnStartBullet(coroutine);
         }
     }
 }

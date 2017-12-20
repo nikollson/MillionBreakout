@@ -718,14 +718,14 @@ namespace UniRx
         bool calledStart = false;
         Subject<Unit> start;
 
-        /// <summary>Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</summary>
+        /// <summary>OnStartBullet is called on the frame when a script is enabled just before any of the OnUpdateBullet methods is called the first time.</summary>
         public override void Start()
         {
             calledStart = true;
             if (start != null) { start.OnNext(Unit.Default); start.OnCompleted(); }
         }
 
-        /// <summary>Start is called on the frame when a script is enabled just before any of the Update methods is called the first time.</summary>
+        /// <summary>OnStartBullet is called on the frame when a script is enabled just before any of the OnUpdateBullet methods is called the first time.</summary>
         public IObservable<Unit> StartAsObservable()
         {
             if (calledStart) return Observable.Return(Unit.Default);
@@ -734,13 +734,13 @@ namespace UniRx
 
         Subject<Unit> update;
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         public override void Update()
         {
             if (update != null) update.OnNext(Unit.Default);
         }
 
-        /// <summary>Update is called every frame, if the MonoBehaviour is enabled.</summary>
+        /// <summary>OnUpdateBullet is called every frame, if the MonoBehaviour is enabled.</summary>
         public IObservable<Unit> UpdateAsObservable()
         {
             return update ?? (update = new Subject<Unit>());

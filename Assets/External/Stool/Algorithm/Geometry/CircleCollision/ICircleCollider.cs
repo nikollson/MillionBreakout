@@ -5,7 +5,7 @@ namespace Stool.Algorithm.Geometry
 {
     interface ICircleCollider
     {
-        Vector2 GetPosition();
-        float GetRadius();
+        Vector2 GetColliderCenter();
+        float GetColliderRadius();
     }
 }

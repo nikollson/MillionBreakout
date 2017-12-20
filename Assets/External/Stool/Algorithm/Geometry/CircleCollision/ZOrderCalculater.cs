@@ -12,12 +12,12 @@ namespace Stool.Algorithm.Geometry
 
             for (int i = 0; i < setting.Depth; i++)
             {
-                bool isCircleBigger = rect.Width / 2 <= collider.GetRadius();
+                bool isCircleBigger = rect.Width / 2 <= collider.GetColliderRadius();
                 bool isDepthMax = i == setting.Depth - 1;
 
                 if (isCircleBigger || isDepthMax)break;
 
-                Vector2 toCircle = collider.GetPosition() - rect.Position;
+                Vector2 toCircle = collider.GetColliderCenter() - rect.Position;
                 Vector2 nextCenter = rect.Position - rect.Size / 4;
 
                 zorder *= 4;

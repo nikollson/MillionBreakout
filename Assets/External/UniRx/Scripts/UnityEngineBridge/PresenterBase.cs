@@ -11,8 +11,8 @@ namespace UniRx
 {
     // InEditor : Construct Children Dependency
     // Awake : Construct Parent Dependency
-    // Start(Capture phase)  : Parent to Child, pass argument
-    // Start(Bubbling phase) : Child to Parent, initialize(like constructor)
+    // OnStartBullet(Capture phase)  : Parent to Child, pass argument
+    // OnStartBullet(Bubbling phase) : Child to Parent, initialize(like constructor)
 
     /// <summary>
     /// [Obsolete]Infrastructure interface for PresenterBase`T
@@ -39,7 +39,7 @@ namespace UniRx
         }
 
         /// <summary>
-        /// Same as Start but called before children initialized, it's chance for propagate argument to children.
+        /// Same as OnStartBullet but called before children initialized, it's chance for propagate argument to children.
         /// </summary>
         protected abstract void BeforeInitialize();
 
@@ -49,7 +49,7 @@ namespace UniRx
         }
 
         /// <summary>
-        /// Force Start BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.
+        /// Force OnStartBullet BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.
         /// </summary>
         public void ForceInitialize()
         {
@@ -57,7 +57,7 @@ namespace UniRx
         }
 
         /// <summary>
-        /// Same as Start but called after all children are initialized.
+        /// Same as OnStartBullet but called after all children are initialized.
         /// </summary>
         protected abstract void Initialize();
     }
@@ -111,17 +111,17 @@ namespace UniRx
         protected abstract IPresenter[] Children { get; }
 
         /// <summary>
-        /// Same as Start but called before children initialized, it's chance for propagate argument to children.
+        /// Same as OnStartBullet but called before children initialized, it's chance for propagate argument to children.
         /// </summary>
         protected abstract void BeforeInitialize(T argument);
 
         /// <summary>
-        /// Same as Start but called after all children are initialized.
+        /// Same as OnStartBullet but called after all children are initialized.
         /// </summary>
         protected abstract void Initialize(T argument);
 
         /// <summary>
-        /// Force Start BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.
+        /// Force OnStartBullet BeforeInitialize/Initialize. If you create presenter dynamically, maybe useful.
         /// </summary>
         public virtual void ForceInitialize(T argument)
         {
@@ -196,7 +196,7 @@ namespace UniRx
                 child.StartCapturePhase();
             }
 
-            // Start Bubbling phase
+            // OnStartBullet Bubbling phase
             if (children.Length == 0)
             {
                 Initialize(argument);
