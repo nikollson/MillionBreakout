@@ -10,9 +10,12 @@ namespace StoolKit.ThousandBullets.Sample
         private int _count = 0;
         private Setting _setting;
 
+        public bool IsDead { get; private set; }
+
         public NormalBulletInstance(Setting setting)
         {
             _setting = setting;
+            IsDead = false;
         }
 
         public override Material GetInitalBulletMaterial()
@@ -33,7 +36,7 @@ namespace StoolKit.ThousandBullets.Sample
 
             if (_count > 120)
             {
-                DestroyThisBullet();
+                IsDead = true;
             }
         }
 

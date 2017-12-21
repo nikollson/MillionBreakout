@@ -7,39 +7,34 @@ namespace Stool.Algorithm.Geometry
 {
     partial class CircleCollisionManager
     {
-        private CircleCollisionColliders Colliders;
-        public CircleCollisionChecker Checker;
-
-        private CircleCollisionSetting _setting;
+        public CircleCollisionData Data { get; private set; }
+        public CircleCollisionChecker Checker { get; private set; }
 
         public CircleCollisionManager(CircleCollisionSetting setting)
         {
-            _setting = setting;
-
-            Colliders = new CircleCollisionColliders();
-            Checker = new CircleCollisionChecker(Colliders);
+            Data = new CircleCollisionData(setting);
+            Checker = new CircleCollisionChecker(Data);
             UpdateSetting(setting);
         }
 
         public void UpdateSetting(CircleCollisionSetting setting)
         {
-            Checker.UpdateSetting(setting);
+            Data.UpdateSetting(setting);
         }
 
         public void RefreshColliderInfo()
         {
-            Colliders.SortColliders(_setting);
-            Checker.Reflesh();
+            Data.RefreshColliderInfo();
         }
 
         public void AddCollider(ICircleCollider collider)
         {
-            Colliders.Add(collider);
+            Data.Add(collider);
         }
 
         public void RemoveCollider(ICircleCollider collider)
         {
-            Colliders.Remove(collider);
+            Data.Remove(collider);
         }
     }
 }

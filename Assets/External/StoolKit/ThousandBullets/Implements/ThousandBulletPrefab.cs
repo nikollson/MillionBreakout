@@ -71,12 +71,6 @@ namespace StoolKit.ThousandBullets
             MeshRenderer.enabled = false;
         }
 
-        public bool IsEnable()
-        {
-            if (_behaviour == null) return false;
-            return _behaviour.IsEnable();
-        }
-
         public void Update()
         {
             if(_behaviour == null)return;

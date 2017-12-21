@@ -42,5 +42,10 @@ namespace StoolKit.BreakoutGameScene
         {
             return Radius;
         }
+
+        public void DestroyThisBall()
+        {
+
+        }
     }
 }

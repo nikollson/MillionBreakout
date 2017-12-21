@@ -12,11 +12,13 @@ namespace StoolKit.ThousandBullets
 
         private RecycleInstanciateManager _recycle;
         private LinkedList<BulletRecycleController> _controllers;
+        private Dictionary<ThousandBulletBehaviour, LinkedListNode<BulletRecycleController>> _dictionary;
 
         public void Awake()
         {
             _recycle = new RecycleInstanciateManager();
             _controllers = new LinkedList<BulletRecycleController>();
+            _dictionary = new Dictionary<ThousandBulletBehaviour, LinkedListNode<BulletRecycleController>>();
         }
 
         public void AddBullet(ThousandBulletBehaviour bulletBehaviour, Vector3 position, Quaternion rotation)
@@ -26,25 +28,16 @@ namespace StoolKit.ThousandBullets
             var obj = _recycle.Instanciate(controller, DefaultPrefab, position, rotation);
             obj.transform.parent = transform;
 
-            _controllers.AddLast(controller);
+            var node = _controllers.AddLast(controller);
+            _dictionary.Add(bulletBehaviour, node);
         }
 
-        public void Update()
+        public void Remove(ThousandBulletBehaviour bulletBehaviour)
         {
-            var current = _controllers.First;
-
-            while(current!=null)
-            {
-                var next = current.Next;
-
-                if (current.Value.IsEnable() == false)
-                {
-                    _recycle.Remove(current.Value);
-                    _controllers.Remove(current);
-                }
-
-                current = next;
-            }
+            var node = _dictionary[bulletBehaviour];
+            _controllers.Remove(node);
+            _recycle.Remove(node.Value);
+            _dictionary.Remove(bulletBehaviour);
         }
 
         class BulletRecycleController : IRecycleInstanceController
@@ -66,11 +59,6 @@ namespace StoolKit.ThousandBullets
             public void ClearData(GameObject gameObject)
             {
                 _bulletPrefab.ClearBehaviour();
-            }
-
-            public bool IsEnable()
-            {
-                return _bulletPrefab.IsEnable();
             }
         }
     }

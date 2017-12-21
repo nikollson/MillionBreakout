@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+using Stool.CSharp;
 using UnityEngine;
 
 namespace StoolKit.ThousandBullets.Sample
@@ -12,7 +14,13 @@ namespace StoolKit.ThousandBullets.Sample
 
         public NormalBulletInstance.Setting Setting;
 
+        private LinkedList<NormalBulletInstance> bullets;
         private float count = 0;
+
+        void Awake()
+        {
+            bullets = new LinkedList<NormalBulletInstance>();
+        }
 
         public void Update()
         {
@@ -20,18 +28,23 @@ namespace StoolKit.ThousandBullets.Sample
             {
                 for (int i = 0; i < N; i++)
                 {
-                    MakeBullet(new Vector3(i * 0.5f, 0, 0), Quaternion.identity);
+                    var bullet = MakeBullet(new Vector3(i * 0.5f, 0, 0), Quaternion.identity);
+                    bullets.AddLast(bullet);
                 }
                 count -= deltaTime;
             }
 
             count += Time.deltaTime;
+
+            bullets.RemoveNodeIf(x => x.IsDead, x => ThousandBulletManager.Remove(x));
         }
 
-        public void MakeBullet(Vector3 position, Quaternion rotation)
+        public NormalBulletInstance MakeBullet(Vector3 position, Quaternion rotation)
         {
             var behaviour = new NormalBulletInstance(Setting);
             ThousandBulletManager.AddBullet(behaviour, position, rotation);
+
+            return behaviour;
         }
     }
 }

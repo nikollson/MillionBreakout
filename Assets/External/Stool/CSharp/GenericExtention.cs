@@ -19,7 +19,7 @@ namespace Stool.CSharp
             }
         }
 
-        public static void RemoveNodeIf<T>(this LinkedList<T> list, Func<T, bool> judgeFunc)
+        public static void RemoveNodeIf<T>(this LinkedList<T> list, Func<T, bool> judgeFunc, Action<T> callBackFunc = null)
         {
             var current = list.First;
             while (current != null)
@@ -27,6 +27,10 @@ namespace Stool.CSharp
                 var next = current.Next;
                 if (judgeFunc(current.Value))
                 {
+                    if (callBackFunc != null)
+                    {
+                        callBackFunc(current.Value);
+                    }
                     list.Remove(current);
                 }
                 current = next;
