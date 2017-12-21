@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using Stool.CSharp;
 using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
@@ -21,9 +22,9 @@ namespace Stool.Algorithm.Geometry
 			_data = data;
 		}
 
-		public List<ICircleCollider> CheckRectangle(Rectangle rect)
+		public List<CircleCollisionInfo> CheckRectangle(Rectangle rect)
 		{
-			var ret = new List<ICircleCollider>();
+			var ret = new List<CircleCollisionInfo>();
 
 			RecursiveCheck(
 				(x, y) => CheckRectangle_Area(rect, x, y),
@@ -104,7 +105,7 @@ namespace Stool.Algorithm.Geometry
 		private void RecursiveCheck(
 			Func<Rectangle, float, CheckState> areaFunc,
 			Func<ICircleCollider, DistanceInfo2D> colliderFunc,
-			List<ICircleCollider> result,
+			List<CircleCollisionInfo> result,
 		   int zorder, Rectangle area, CheckState parentState)
 		{
 
@@ -120,24 +121,16 @@ namespace Stool.Algorithm.Geometry
 
 			if (currentState == CheckState.Out)return;
 
-			if (currentState == CheckState.NearIn)
+			if (currentState == CheckState.NearIn || currentState == CheckState.AllIn)
 			{
 			    for (int i = zorderInfo.Start; i < zorderInfo.End; i++)
 			    {
 			        var info = colliderFunc(_data.Data[i].Collider);
 			        if (info.IsHit)
 			        {
-			            result.Add(_data.Data[i].Collider);
+			            result.Add(new CircleCollisionInfo(_data.Data[i].Collider, info));
 			        }
 			    }
-			}
-
-			if (currentState == CheckState.AllIn)
-			{
-				for (int i = zorderInfo.Start; i < zorderInfo.End; i++)
-				{
-					result.Add(_data.Data[i].Collider);
-				}
 			}
             
 			for (int i = 0; i < 2; i++)
