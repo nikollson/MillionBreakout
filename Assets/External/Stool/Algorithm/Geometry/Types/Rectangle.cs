@@ -16,7 +16,7 @@ namespace Stool.Algorithm.Geometry
 
         public float Height
         {
-            get { return Size.x; }
+            get { return Size.y; }
             set { Size.y = value; }
         }
 
