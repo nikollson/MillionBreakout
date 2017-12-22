@@ -1,7 +1,7 @@
 ﻿
 namespace Stool.Algorithm.Geometry
 {
-    public struct DistanceInfo2D
+    public class DistanceInfo2D
     {
         public bool IsHit { get { return Distance <= 0; } }
         public float Distance;

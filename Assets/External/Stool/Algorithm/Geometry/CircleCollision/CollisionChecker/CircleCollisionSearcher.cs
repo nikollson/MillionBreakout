@@ -39,7 +39,7 @@ namespace Stool.Algorithm.Geometry
 	        var ret = new List<CircleCollisionInfo>();
 
             RecursiveCheck(
-                checker.AreaCheck, checker.CircleCheck,
+                checker.CircleCollision_AreaCheck, checker.CircleCollision_ColliderCheck,
                 ret,0,_data.Setting.GetAreaRectangle(), CheckState.NearIn);
 
 	        return ret;

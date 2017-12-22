@@ -8,12 +8,23 @@ namespace Tkool.BreakoutGameScene
     class BreakoutBoxBlockBehaviour : BreakoutBlockBehaviour
     {
         public BoxCollider2D BoxCollider;
-        public Rectangle Rectangle { get; private set; }
 
-        public void Awake()
+        public Rectangle Rectangle
         {
-            Rectangle = GetRectangle(BoxCollider);
+            get
+            {
+                if (_rectangleMadeFrame != Time.frameCount)
+                {
+                    _rectangle = GetRectangle(BoxCollider);
+                    _rectangleMadeFrame = Time.frameCount;
+                }
+                return _rectangle;
+            }
         }
+
+        private Rectangle _rectangle;
+        private int _rectangleMadeFrame = -1;
+
 
         private Rectangle GetRectangle(BoxCollider2D boxColider)
         {
@@ -26,12 +37,12 @@ namespace Tkool.BreakoutGameScene
             return new Rectangle(position, size, rotation);
         }
 
-        public override CircleCollisionSearcher.CheckState AreaCheck(Rectangle area, float currentWidth)
+        public override CircleCollisionSearcher.CheckState CircleCollision_AreaCheck(Rectangle area, float currentWidth)
         {
             return CircleCollisionCheckFunctions.AreaCheck_Rectangle(Rectangle, area, currentWidth);
         }
 
-        public override DistanceInfo2D CircleCheck(ICircleCollider circleCollider)
+        public override DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider circleCollider)
         {
             return CircleCollisionCheckFunctions.CircleCheck_Rectangle(Rectangle, circleCollider);
         }

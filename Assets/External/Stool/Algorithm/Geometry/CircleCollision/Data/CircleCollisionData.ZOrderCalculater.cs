@@ -14,7 +14,7 @@ namespace Stool.Algorithm.Geometry
 
                 for (int i = 0; i < setting.Depth; i++)
                 {
-                    bool isCircleBigger = rect.Width / 2 <= collider.GetColliderRadius();
+                    bool isCircleBigger = rect.Width <= collider.GetColliderRadius() * 2;
                     bool isDepthMax = i == setting.Depth - 1;
 
                     if (isCircleBigger || isDepthMax)

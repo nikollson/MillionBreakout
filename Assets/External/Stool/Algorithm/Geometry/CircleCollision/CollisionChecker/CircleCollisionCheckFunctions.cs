@@ -8,7 +8,7 @@ namespace Stool.Algorithm.Geometry
         public static DistanceInfo2D CircleCheck_Rectangle(Rectangle rect, ICircleCollider collider)
         {
             var info = Distance2D.RectangleToPoint(rect, collider.GetColliderCenter());
-            info.Distance -= collider.GetColliderRadius() * 0.5f;
+            info.Distance -= collider.GetColliderRadius();
             return info;
         }
 

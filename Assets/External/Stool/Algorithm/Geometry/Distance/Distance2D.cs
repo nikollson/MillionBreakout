@@ -20,7 +20,6 @@ namespace Stool.Algorithm.Geometry
             float disty = Mathf.Abs(y) - a.Height * 0.5f;
 
             bool rev = distx < 0 && disty < 0;
-            float angle;
             if (rev)
             {
                 if (distx < disty) distx = 0;
@@ -33,7 +32,7 @@ namespace Stool.Algorithm.Geometry
             }
 
             float distance = Mathf.Sqrt(distx * distx + disty * disty) * (rev ? -1 : 1);
-            angle = Mathf.Atan2(
+            float angle = Mathf.Atan2(
                 -disty * Mathf.Sign(y) * Mathf.Sign(distance), 
                 -distx * Mathf.Sign(x) * Mathf.Sign(distance));
 

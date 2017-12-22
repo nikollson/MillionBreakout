@@ -1,5 +1,6 @@
 ﻿
 using Stool.Algorithm.Geometry;
+using UnityEngine;
 
 namespace Tkool.BreakoutGameScene.Sample
 {

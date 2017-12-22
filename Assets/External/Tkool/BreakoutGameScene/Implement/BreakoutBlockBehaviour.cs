@@ -24,8 +24,8 @@ namespace Tkool.BreakoutGameScene
             OnDestroy(this);
         }
 
-        public abstract CircleCollisionSearcher.CheckState AreaCheck(Rectangle area, float currentWidth);
+        public abstract CircleCollisionSearcher.CheckState CircleCollision_AreaCheck(Rectangle area, float currentWidth);
 
-        public abstract DistanceInfo2D CircleCheck(ICircleCollider collider);
+        public abstract DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider collider);
     }
 }

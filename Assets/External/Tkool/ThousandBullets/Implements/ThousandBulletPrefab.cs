@@ -10,7 +10,7 @@ namespace Tkool.ThousandBullets
         public Material DefaultMaterial;
         public Texture2D DefaultTexture;
 
-        private float previousRaidus = 1.0f;
+        private float previousRaidus = 0.5f;
 
         public MeshRenderer MeshRenderer
         {
