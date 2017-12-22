@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    class CircleCollisionData
+    partial class CircleCollisionData
     {
         public List<ColliderWrapper> Data { get; private set; }
         public IndexInfo[] ZorderInfo { get; private set; }
@@ -44,7 +44,7 @@ namespace Stool.Algorithm.Geometry
         {
             foreach (var wrapper in Data)
             {
-                int zorder = CircleCollisionManager.ZOrderCalculater.GetZOrder(wrapper.Collider, Setting);
+                int zorder = ZOrderCalculater.GetZOrder(wrapper.Collider, Setting);
                 wrapper.UpdateZOrder(zorder);
             }
 

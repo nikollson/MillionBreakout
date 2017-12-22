@@ -1,7 +1,8 @@
 ﻿
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class SampleEraseGridBlock : BreakoutBlockBehaviour
+    class SampleGridBlock : BreakoutGridBlockBehaviour
     {
+
     }
 }

@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    partial class CircleCollisionManager
+    partial class CircleCollisionData
     {
-        public static class ZOrderCalculater
+        static class ZOrderCalculater
         {
             public static int GetZOrder(ICircleCollider collider, CircleCollisionSetting setting)
             {

@@ -5,15 +5,15 @@ using Stool.CSharp;
 
 namespace Stool.Algorithm.Geometry
 {
-    partial class CircleCollisionManager
+    class CircleCollisionManager
     {
         public CircleCollisionData Data { get; private set; }
-        public CircleCollisionChecker Checker { get; private set; }
+        public CircleCollisionSearcher Searcher { get; private set; }
 
         public CircleCollisionManager(CircleCollisionSetting setting)
         {
             Data = new CircleCollisionData(setting);
-            Checker = new CircleCollisionChecker(Data);
+            Searcher = new CircleCollisionSearcher(Data);
             UpdateSetting(setting);
         }
 
@@ -22,7 +22,7 @@ namespace Stool.Algorithm.Geometry
             Data.UpdateSetting(setting);
         }
 
-        public void RefreshColliderInfo()
+        public void UpdateColliderInfo()
         {
             Data.RefreshColliderInfo();
         }

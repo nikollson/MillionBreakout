@@ -22,9 +22,9 @@ namespace Tkool.MilllionBullets
             var vertices = GetBoxCollider().GetGlobalVertices(transform);
 
             Vector3 center = (vertices[0] + vertices[2]) / 2;
-            float width = (vertices[0] - vertices[3]).magnitude;
-            float height = (vertices[0] - vertices[1]).magnitude;
-            Vector3 dir = vertices[3] - vertices[0];
+            float width = (vertices[0] - vertices[1]).magnitude;
+            float height = (vertices[0] - vertices[3]).magnitude;
+            Vector3 dir = vertices[1] - vertices[0];
             float angle = Mathf.Atan2(dir.y, dir.x);
 
             return new BoxData(center, angle, width, height);

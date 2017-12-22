@@ -5,7 +5,6 @@ using Stool.Algorithm.Geometry;
 using Stool.CSharp;
 using Tkool.ThousandBullets;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Tkool.BreakoutGameScene
 {
@@ -27,9 +26,11 @@ namespace Tkool.BreakoutGameScene
         {
             ThousandBulletsManager.AddBullet(ball, position, rotation);
             CircleCollisionManager.AddCollider(ball);
+
+            ball.OnDestroy += RemoveBall;
         }
 
-        public void RemoveBall(BreakoutBallBehaviour ball)
+        private void RemoveBall(BreakoutBallBehaviour ball)
         {
             ThousandBulletsManager.Remove(ball);
             CircleCollisionManager.RemoveCollider(ball);
@@ -38,22 +39,29 @@ namespace Tkool.BreakoutGameScene
         public void AddBlock(BreakoutBlockBehaviour block)
         {
             BlocksManager.Add(block);
+
+            block.OnDestroy += RemoveBlock;
         }
 
-        public void RemoveBlock(BreakoutBlockBehaviour block)
+        private void RemoveBlock(BreakoutBlockBehaviour block)
         {
             BlocksManager.Remove(block);
         }
 
         public void Update()
         {
+            CircleCollisionManager.UpdateColliderInfo();
+
             foreach (var block in BlocksManager)
             {
-                var result = CircleCollisionManager.Checker.CheckRectangle(block.GetRectangle());
-
+                var result = CircleCollisionManager.Searcher.Check(block);
+                
                 foreach (var collision in result)
                 {
                     var ball = (BreakoutBallBehaviour) collision.Collider;
+
+                    if (block.CanCollision(ball) == false) continue;
+
                     ball.OnBlockCollide(block, collision.DistanceInfo);
                     block.OnBallCollide(ball, collision.DistanceInfo);
                 }

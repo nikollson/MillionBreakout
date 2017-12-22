@@ -9,13 +9,13 @@ namespace Stool.ScriptingUtility
         {
             var ret = new Vector3[4];
 
-            Vector2 leftBottom = boxCollider.offset - boxCollider.size / 2;
-            Vector2 rightTop = boxCollider.offset + boxCollider.size / 2;
+            Vector2 leftBottom = boxCollider.offset - boxCollider.size * 0.5f;
+            Vector2 rightTop = boxCollider.offset + boxCollider.size * 0.5f;
 
             ret[0] = leftBottom;
-            ret[1] = new Vector2(leftBottom.x, rightTop.y);
+            ret[1] = new Vector2(rightTop.x, leftBottom.y);
             ret[2] = rightTop;
-            ret[3] = new Vector2(rightTop.x, leftBottom.y);
+            ret[3] = new Vector2(leftBottom.x, rightTop.y);
 
             return ret;
         }
