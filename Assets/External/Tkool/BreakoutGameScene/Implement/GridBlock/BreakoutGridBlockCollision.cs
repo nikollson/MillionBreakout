@@ -5,30 +5,17 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutGridBlockBehaviour : BreakoutBoxBlockBehaviour
+    static class BreakoutGridBlockCollision
     {
-        public int ArrayWidth = 5;
-        public int ArrayHeight = 5;
 
-        public bool[,] EnableArray
+        public static DistanceInfo2D CheckHitCircle(Rectangle rect, bool[,] enableArray, ICircleCollider circleCollider)
         {
-            get
-            {
-                if (_enableArray == null)
-                    _enableArray = new bool[ArrayHeight, ArrayWidth];
-
-                return _enableArray;
-            }
-        }
-
-        private bool[,] _enableArray;
-
-        public override DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider circleCollider)
-        {
-            var rect = Rectangle;
             var size = rect.Size;
             var center = circleCollider.GetColliderCenter();
             var radius = circleCollider.GetColliderRadius();
+            int arrayWidth = enableArray.GetLength(1);
+            int arrayHeight = enableArray.GetLength(0);
+
             var info = new GridBlockDistanceInfo();
 
             float sinr = Mathf.Sin(rect.Rotation);
@@ -37,8 +24,8 @@ namespace Tkool.BreakoutGameScene
             var cx = center.x - rect.Position.x + (cosr * rect.Size.x - sinr * rect.Size.y) * 0.5f;
             var cy = center.y - rect.Position.y + (sinr * rect.Size.x + cosr * rect.Size.y) * 0.5f;
 
-            var scalex = ArrayWidth / size.x;
-            var scaley = ArrayHeight / size.y;
+            var scalex = arrayWidth / size.x;
+            var scaley = arrayHeight / size.y;
 
             var tx = (cosr * cx + sinr * cy) * scalex;
             var ty = (-sinr * cx + cosr * cy) * scaley;
@@ -47,15 +34,18 @@ namespace Tkool.BreakoutGameScene
             var rady = radius * scaley;
 
             int stx = Mathf.Max(0, (int)Mathf.Floor(tx - radx));
-            int sty = Mathf.Max(0, (int) Mathf.Floor(ty - rady));
+            int sty = Mathf.Max(0, (int)Mathf.Floor(ty - rady));
 
-            int enx = Mathf.Min(ArrayWidth, (int) Mathf.Ceil(tx + radx));
-            int eny = Mathf.Min(ArrayHeight, (int) Mathf.Ceil(ty + rady));
+            int enx = Mathf.Min(arrayWidth, (int)Mathf.Ceil(tx + radx));
+            int eny = Mathf.Min(arrayHeight, (int)Mathf.Ceil(ty + rady));
 
             for (int i = sty; i < eny; i++)
             {
                 for (int j = stx; j < enx; j++)
                 {
+                    if(enableArray[i,j]==false)
+                        continue;
+
                     float dx = tx - j;
                     float dy = ty - i;
 
@@ -65,8 +55,10 @@ namespace Tkool.BreakoutGameScene
                     bool rev = distx < 0 && disty < 0;
                     if (rev)
                     {
-                        if (distx < disty) distx = 0;
-                        else disty = 0;
+                        if (distx < disty)
+                            distx = 0;
+                        else
+                            disty = 0;
                     }
                     else
                     {
@@ -78,23 +70,13 @@ namespace Tkool.BreakoutGameScene
                     float angle = Mathf.Atan2(
                         -disty * Mathf.Sign(dy - 0.5f) * Mathf.Sign(distance),
                         -distx * Mathf.Sign(dx - 0.5f) * Mathf.Sign(distance));
-                    
+
                     info.MergeInfo(new DistanceInfo2D(distance - radius, angle), j, i);
                 }
             }
 
             return info;
         }
-
-        public override void OnBallCollide(BreakoutBallBehaviour ball, DistanceInfo2D distanceInfo)
-        {
-            var info = (GridBlockDistanceInfo) distanceInfo;
-            foreach (var i in info.InfoList)
-            {
-
-            }
-        }
-
 
         public class GridBlockDistanceInfo : DistanceInfo2D
         {
