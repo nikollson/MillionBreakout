@@ -1,7 +1,7 @@
 ﻿Shader "Custom/BreakoutGameScene/GridBlockShader" {
 	Properties
 	{
-		_MainTex("Base (RGB)", 2D) = "white" {}
+		MainTex("Base (RGB)", 2D) = "white" {}
 	}
 
 	SubShader{
@@ -12,10 +12,10 @@
 			#pragma vertex vert
 			#pragma fragment frag
 
-			uniform int _ArrayWidth;
-			uniform int _ArrayHeight;
-			uniform sampler2D _MainTex;
-			uniform float _EraseArray[1023];
+			uniform int ArrayWidth;
+			uniform int ArrayHeight;
+			uniform sampler2D MainTex;
+			uniform float EraseArray[1023];
 
 			struct appdata {
 				float4 vertex   : POSITION;
@@ -35,15 +35,15 @@
 			}
 
 			fixed4 frag(v2f v) : SV_Target{
-				int x = v.uv.x * _ArrayWidth;
-				int y = (int)(v.uv.y * _ArrayHeight)*_ArrayHeight;
+				int x = v.uv.x * ArrayWidth;
+				int y = (int)(v.uv.y * ArrayHeight)*ArrayHeight;
 
-				if (_EraseArray[x + y] != 0)
+				if (EraseArray[x + y] != 0)
 				{
 					discard;
 				}
 
-				return tex2D(_MainTex, v.uv);
+				return tex2D(MainTex, v.uv);
 			}
 			ENDCG
 		}

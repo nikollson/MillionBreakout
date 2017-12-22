@@ -1,6 +1,5 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using Stool.Algorithm.Geometry;
 using Stool.CSharp;
 using Tkool.ThousandBullets;

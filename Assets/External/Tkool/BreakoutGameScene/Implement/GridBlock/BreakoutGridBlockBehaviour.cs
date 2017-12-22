@@ -4,65 +4,60 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutGridBlockBehaviour : BreakoutBoxBlockBehaviour
+    abstract class BreakoutGridBlockBehaviour : BreakoutBoxBlockBehaviour
     {
         public MeshRenderer MeshRenderer;
-        public MeshFilter MeshFilter;
-        public int ArrayWidth = 5;
-        public int ArrayHeight = 5;
 
-        public bool[,] EnableArray
+        public abstract IBreakoutGridBlockData[,] GetBlockArray();
+
+        public void OnWillRenderObject()
         {
-            get
-            {
-                if (_enableArray == null)
-                {
-                    _enableArray = new bool[ArrayHeight, ArrayWidth];
-                    for (int i = 0; i < ArrayHeight; i++)
-                    {
-                        for (int j = 0; j < ArrayWidth; j++)
-                        {
-                            _enableArray[i, j] = true;
-                        }
-                    }
-                }
+            var blockData = GetBlockArray();
+            OnPrepareMaterial(MeshRenderer.material, blockData);
 
-                return _enableArray;
+            bool hasEnable = false;
+            foreach(var a in blockData)
+            {
+                hasEnable |= a.IsEnable();
+            }
+
+            if(hasEnable==false)
+            {
+                Destroy();
             }
         }
 
-        bool[,] _enableArray;
-
-        public virtual void OnWillRenderObject()
+        public virtual void OnPrepareMaterial(Material material, IBreakoutGridBlockData[,] blockArray)
         {
-            MeshRenderer.material.SetInt("_ArrayWidth", ArrayWidth);
-            MeshRenderer.material.SetInt("_ArrayHeight", ArrayHeight);
+            int width = blockArray.GetLength(1);
+            int height = blockArray.GetLength(0);
 
-            var eraseArray = new float[EnableArray.Length];
-            for (int i = 0; i < ArrayHeight; i++)
+            var eraseArray = new float[blockArray.Length];
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < ArrayWidth; j++)
+                for (int j = 0; j < width; j++)
                 {
-                    int index = i * ArrayWidth + j;
-                    eraseArray[index] = EnableArray[i, j] ? 0 : 1;
+                    int index = i * width + j;
+                    eraseArray[index] = blockArray[i, j].IsEnable() ? 0 : 1;
                 }
             }
-            MeshRenderer.material.SetFloatArray("_EraseArray", eraseArray);
-        }
-        
-        public override void OnBallCollide(BreakoutBallBehaviour ball, DistanceInfo2D distanceInfo)
-        {
-            var info = (BreakoutGridBlockCollision.GridBlockDistanceInfo)distanceInfo;
 
-            foreach(var a in info.InfoList)
-            {
-                EnableArray[a.ArrayY, a.ArrayX] = false;
-            }
+            material.SetInt("ArrayWidth", width);
+            material.SetInt("ArrayHeight", height);
+            material.SetFloatArray("EraseArray", eraseArray);
         }
 
         public override DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider circleCollider)
         {
-            return BreakoutGridBlockCollision.CheckHitCircle(Rectangle, EnableArray, circleCollider);
+            return BreakoutGridBlockCollision.CheckHitCircle(Rectangle, GetBlockArray(), circleCollider);
         }
+
+        public override void OnBallCollide(BreakoutBallBehaviour ball, DistanceInfo2D distanceInfo)
+        {
+            var info = (GridBlockDistanceInfo)distanceInfo;
+            OnBallCollideGrid(ball, info);
+        }
+
+        public abstract void OnBallCollideGrid(BreakoutBallBehaviour ball, GridBlockDistanceInfo distanceInfo);
     }
 }

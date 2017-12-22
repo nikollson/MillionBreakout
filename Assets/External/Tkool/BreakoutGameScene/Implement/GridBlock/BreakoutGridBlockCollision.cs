@@ -8,7 +8,7 @@ namespace Tkool.BreakoutGameScene
     static class BreakoutGridBlockCollision
     {
 
-        public static DistanceInfo2D CheckHitCircle(Rectangle rect, bool[,] enableArray, ICircleCollider circleCollider)
+        public static DistanceInfo2D CheckHitCircle(Rectangle rect, IBreakoutGridBlockData[,] enableArray, ICircleCollider circleCollider)
         {
             var size = rect.Size;
             var center = circleCollider.GetColliderCenter();
@@ -43,7 +43,7 @@ namespace Tkool.BreakoutGameScene
             {
                 for (int j = stx; j < enx; j++)
                 {
-                    if(enableArray[i,j]==false)
+                    if(enableArray[i,j].IsEnable()==false)
                         continue;
 
                     float dx = tx - j;
@@ -76,42 +76,6 @@ namespace Tkool.BreakoutGameScene
             }
 
             return info;
-        }
-
-        public class GridBlockDistanceInfo : DistanceInfo2D
-        {
-            public List<GridDistanceInfo> InfoList { get; private set; }
-
-            public GridBlockDistanceInfo() : base(Mathf.Infinity, 0)
-            {
-                InfoList = new List<GridDistanceInfo>();
-            }
-
-            public void MergeInfo(DistanceInfo2D info, int arrayX, int arrayY)
-            {
-                if (Distance > info.Distance)
-                {
-                    Distance = info.Distance;
-                    Angle = info.Angle;
-                }
-                if (info.IsHit)
-                {
-                    InfoList.Add(new GridDistanceInfo(info, arrayX, arrayY));
-                }
-            }
-
-            public class GridDistanceInfo
-            {
-                public DistanceInfo2D Info { get; private set; }
-                public int ArrayX { get; private set; }
-                public int ArrayY { get; private set; }
-                public GridDistanceInfo(DistanceInfo2D info, int arrayX, int arrayY)
-                {
-                    Info = info;
-                    ArrayX = arrayX;
-                    ArrayY = arrayY;
-                }
-            }
         }
     }
 }

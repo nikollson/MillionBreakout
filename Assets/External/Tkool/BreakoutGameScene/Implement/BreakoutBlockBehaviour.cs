@@ -21,6 +21,7 @@ namespace Tkool.BreakoutGameScene
 
         public void Destroy()
         {
+            Destroy(gameObject);
             OnDestroy(this);
         }
 
