@@ -28,7 +28,8 @@ namespace Tkool.BreakoutGameScene.Sample
             return _blockData;
         }
 
-        public override void OnBallCollideGrid(BreakoutBallBehaviour ball, GridBlockDistanceInfo distanceInfo)
+
+        public override void RecieveCollisionEffectGrid(BreakoutBlockCollisionEffect effect, GridBlockDistanceInfo distanceInfo)
         {
             foreach (var info in distanceInfo.InfoList)
             {

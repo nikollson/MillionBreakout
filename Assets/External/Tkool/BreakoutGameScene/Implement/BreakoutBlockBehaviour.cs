@@ -9,9 +9,15 @@ namespace Tkool.BreakoutGameScene
     {
         public Action<BreakoutBlockBehaviour> OnDestroy;
 
-        public virtual void OnBallCollide(BreakoutBallBehaviour ball, DistanceInfo2D distanceInfo)
-        {
 
+        public virtual BreakoutBallCollisionEffect MakeBallCollisionEffect(DistanceInfo2D distanceInfo2D)
+        {
+            return new BreakoutBallCollisionEffect(distanceInfo2D);
+        }
+        
+        public virtual void RecieveCollisionEffect(BreakoutBlockCollisionEffect effect)
+        {
+            if(effect.DoDestroy) Destroy();
         }
 
         public virtual bool CanCollision(BreakoutBallBehaviour ball)

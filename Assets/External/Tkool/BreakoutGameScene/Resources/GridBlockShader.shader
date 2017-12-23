@@ -36,7 +36,7 @@
 
 			fixed4 frag(v2f v) : SV_Target{
 				int x = v.uv.x * ArrayWidth;
-				int y = (int)(v.uv.y * ArrayHeight)*ArrayHeight;
+				int y = (int)(v.uv.y * ArrayHeight)*ArrayWidth;
 
 				if (EraseArray[x + y] != 0)
 				{

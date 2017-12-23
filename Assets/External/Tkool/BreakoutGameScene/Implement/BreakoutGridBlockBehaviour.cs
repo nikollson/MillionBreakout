@@ -52,12 +52,12 @@ namespace Tkool.BreakoutGameScene
             return BreakoutGridBlockCollision.CheckHitCircle(Rectangle, GetBlockArray(), circleCollider);
         }
 
-        public override void OnBallCollide(BreakoutBallBehaviour ball, DistanceInfo2D distanceInfo)
+        public override void RecieveCollisionEffect(BreakoutBlockCollisionEffect effect)
         {
-            var info = (GridBlockDistanceInfo)distanceInfo;
-            OnBallCollideGrid(ball, info);
+            var info = (GridBlockDistanceInfo)effect.DistanceInfo;
+            RecieveCollisionEffectGrid(effect, info);
         }
 
-        public abstract void OnBallCollideGrid(BreakoutBallBehaviour ball, GridBlockDistanceInfo distanceInfo);
+        public abstract void RecieveCollisionEffectGrid(BreakoutBlockCollisionEffect effect, GridBlockDistanceInfo distanceInfo);
     }
 }

@@ -61,8 +61,11 @@ namespace Tkool.BreakoutGameScene
 
                     if (block.CanCollision(ball) == false) continue;
 
-                    ball.OnBlockCollide(block, collision.DistanceInfo);
-                    block.OnBallCollide(ball, collision.DistanceInfo);
+                    var blockEffect = ball.MakeBlockCollisionEffect(collision.DistanceInfo);
+                    var ballEffect = block.MakeBallCollisionEffect(collision.DistanceInfo.GetReverse());
+
+                    ball.RecieveCollisionEffect(ballEffect);
+                    block.RecieveCollisionEffect(blockEffect);
                 }
             }
         }

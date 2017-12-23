@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace Stool.Algorithm.Geometry
 {
     public class DistanceInfo2D
@@ -11,6 +13,12 @@ namespace Stool.Algorithm.Geometry
         {
             Distance = distance;
             Angle = angle;
+        }
+
+        public DistanceInfo2D GetReverse()
+        {
+            float nextAngle = Angle + Mathf.PI * (Angle > 0 ? -1 : 1);
+            return new DistanceInfo2D(Distance, nextAngle);
         }
     }
 }
