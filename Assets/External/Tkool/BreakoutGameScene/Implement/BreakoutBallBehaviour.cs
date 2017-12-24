@@ -8,9 +8,9 @@ namespace Tkool.BreakoutGameScene
 {
     class BreakoutBallBehaviour : ThousandBulletBehaviour, ICircleCollider
     {
-        public float Radius { get; private set; }
-        public Vector2 Velocity { get; private set; }
-        public Texture2D Texture { get; private set; }
+        public float Radius;
+        public Vector2 Velocity;
+        public Texture2D Texture;
 
         public Action<BreakoutBallBehaviour> OnDestroy;
 
@@ -19,6 +19,12 @@ namespace Tkool.BreakoutGameScene
             Radius = radius;
             Velocity = velocity;
             Texture = texture;
+        }
+
+        public BreakoutBallBehaviour(float radius, Vector2 velocity)
+        {
+            Radius = radius;
+            Velocity = velocity;
         }
 
         public override void OnUpdateBullet()
@@ -55,8 +61,6 @@ namespace Tkool.BreakoutGameScene
         {
             Transform.position += (Vector3)effect.GetPositionCorrectDistance();
             Velocity = effect.GetReflectedVelocity(Velocity);
-
-            if(effect.DoDestroy) Destroy();
         }
 
         public void Destroy()

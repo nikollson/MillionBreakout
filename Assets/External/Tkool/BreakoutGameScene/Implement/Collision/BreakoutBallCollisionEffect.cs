@@ -8,7 +8,6 @@ namespace Tkool.BreakoutGameScene
     {
         public DistanceInfo2D DistanceInfo;
         public float PositionCorrectRate = 1;
-        public bool DoDestroy;
 
         public BreakoutBallCollisionEffect(DistanceInfo2D distanceInfo)
         {

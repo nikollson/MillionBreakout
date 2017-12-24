@@ -17,7 +17,7 @@ namespace Tkool.BreakoutGameScene
         
         public virtual void RecieveCollisionEffect(BreakoutBlockCollisionEffect effect)
         {
-            if(effect.DoDestroy) Destroy();
+
         }
 
         public virtual bool CanCollision(BreakoutBallBehaviour ball)
