@@ -1,6 +1,4 @@
 ﻿
-using System;
-using UniRx.Operators;
 using UnityEngine;
 
 namespace Tkool.ThousandBullets
