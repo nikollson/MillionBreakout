@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using Stool.CSharp;
 using Stool.SceneManagement;
@@ -10,6 +11,8 @@ namespace Tkool.ThousandBullets
     {
         public GameObject DefaultPrefab;
 
+        public Func<float> GetDeltaTime { get; private set; }
+
         private RecycleInstanciateManager _recycle;
         private LinkedList<BulletRecycleController> _controllers;
         private Dictionary<ThousandBulletBehaviour, LinkedListNode<BulletRecycleController>> _dictionary;
@@ -19,6 +22,16 @@ namespace Tkool.ThousandBullets
             _recycle = new RecycleInstanciateManager();
             _controllers = new LinkedList<BulletRecycleController>();
             _dictionary = new Dictionary<ThousandBulletBehaviour, LinkedListNode<BulletRecycleController>>();
+
+            GetDeltaTime = () => Time.deltaTime;
+        }
+
+        public void Update()
+        {
+            foreach (var controller in _controllers)
+            {
+                controller.BulletBehaviour.OnUpdateBullet(GetDeltaTime());
+            }
         }
 
         public void AddBullet(ThousandBulletBehaviour bulletBehaviour, Vector3 position, Quaternion rotation)
@@ -40,25 +53,49 @@ namespace Tkool.ThousandBullets
             _dictionary.Remove(bulletBehaviour);
         }
 
+        public void RemoveIf(
+            Func<ThousandBulletBehaviour, bool> judgeFunc,
+            Action<ThousandBulletBehaviour> callBack = null)
+        {
+            _controllers.RemoveNodeIf(
+                x => judgeFunc(x.BulletBehaviour),
+                x => callBack(x.BulletBehaviour)
+            );
+        }
+
+        public void ForeachBullets(Action<ThousandBulletBehaviour> callback)
+        {
+            foreach (var controller in _controllers)
+            {
+                callback(controller.BulletBehaviour);
+            }
+        }
+
+        public void SetDeltaTimeFunction(Func<float> deltaTimeFunction)
+        {
+            GetDeltaTime = deltaTimeFunction;
+        }
+
+
         class BulletRecycleController : IRecycleInstanceController
         {
-            private ThousandBulletPrefab _bulletPrefab;
-            private ThousandBulletBehaviour _behaviour;
+            public ThousandBulletPrefab BulletPrefab { get; private set; }
+            public ThousandBulletBehaviour BulletBehaviour { get; private set; }
 
             public BulletRecycleController(ThousandBulletBehaviour behaviour)
             {
-                _behaviour = behaviour;
+                BulletBehaviour = behaviour;
             }
 
             public void SetData(GameObject gameObject)
             {
-                _bulletPrefab = gameObject.GetComponent<ThousandBulletPrefab>();
-                _bulletPrefab.SerBehaviour(_behaviour);
+                BulletPrefab = gameObject.GetComponent<ThousandBulletPrefab>();
+                BulletPrefab.SerBehaviour(BulletBehaviour);
             }
 
             public void ClearData(GameObject gameObject)
             {
-                _bulletPrefab.ClearBehaviour();
+                BulletPrefab.ClearBehaviour();
             }
         }
     }

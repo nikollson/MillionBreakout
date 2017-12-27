@@ -5,11 +5,11 @@ namespace Stool.Algorithm.Geometry
 {
     static class CircleCollisionCheckFunctions
     {
-        public static DistanceInfo2D CircleCheck_Rectangle(Rectangle rect, ICircleCollider collider)
+        public static CircleCollisionInfo CircleCheck_Rectangle(Rectangle rect, ICircleCollider collider)
         {
             var info = Distance2D.RectangleToPoint(rect, collider.GetColliderCenter());
             info.Distance -= collider.GetColliderRadius();
-            return info;
+            return new CircleCollisionInfo(collider, info);
         }
 
         public static CircleCollisionSearcher.CheckState AreaCheck_Rectangle(Rectangle rect, Rectangle area, float currentWidth)

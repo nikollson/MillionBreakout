@@ -68,13 +68,5 @@ namespace Tkool.ThousandBullets
 
             MeshRenderer.enabled = false;
         }
-
-        public void Update()
-        {
-            if(_behaviour == null)return;
-            _behaviour.OnUpdateBullet();
-
-            UpdateRadius();
-        }
     }
 }

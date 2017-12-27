@@ -1,25 +1,18 @@
 ﻿
-using System;
 using Stool.Algorithm.Geometry;
 using Tkool.ThousandBullets;
 using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutBallBehaviour : ThousandBulletBehaviour, ICircleCollider
+    abstract class BreakoutBallBehaviour : ThousandBulletBehaviour, ICircleCollider
     {
-        public float Radius;
-        public Vector2 Velocity;
-        public Texture2D Texture;
+        public bool IsDestroyed { get; private set; }
+        public float Radius { get; private set; }
+        public Vector2 Velocity { get; set; }
 
-        public Action<BreakoutBallBehaviour> OnDestroy;
+        public float DrawingRadiusExpend = 1.0f;
 
-        public BreakoutBallBehaviour(float radius, Vector2 velocity, Texture2D texture)
-        {
-            Radius = radius;
-            Velocity = velocity;
-            Texture = texture;
-        }
 
         public BreakoutBallBehaviour(float radius, Vector2 velocity)
         {
@@ -27,20 +20,53 @@ namespace Tkool.BreakoutGameScene
             Velocity = velocity;
         }
 
-        public override void OnUpdateBullet()
+
+        public void Destroy()
         {
-            Transform.position = Transform.position + (Vector3)Velocity * Time.deltaTime;
+            IsDestroyed = true;
         }
 
-        public override Texture2D GetInitialBulletTexture()
+        public abstract IBallCollisionEffect GetCollisionEffect();
+
+        public abstract void OnCollision(CircleCollisionInfo collision, IBlockCollisionEffect blockHitEffect);
+
+        public void OnCollisionPhysicsCorrect(CircleCollisionInfo collision)
         {
-            return Texture;
+            float angle = collision.AngleToCircle;
+            Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+            float velocityDot = Vector2.Dot(dir, Velocity);
+            Vector2 nextVelocity = Velocity - velocityDot * 2 * dir;
+
+            Vector2 nextPosition = Transform.position + (Vector3)dir * collision.Distance * -1;
+
+            PositionCorrect(nextPosition);
+            VelocityCorrect(nextVelocity);
         }
+
+        public virtual void PositionCorrect(Vector3 correctPosition)
+        {
+            Transform.position = correctPosition;
+        }
+
+        public virtual void VelocityCorrect(Vector3 correctVelocity)
+        {
+            Velocity = correctVelocity;
+        }
+
+        public void PositionUpdateOnFrame(float deltaTime)
+        {
+            Transform.position = Transform.position + (Vector3) Velocity * deltaTime;
+        }
+
+        // BulletBehaviour
 
         public override float GetBulletRadius()
         {
-            return Radius;
+            return Radius * DrawingRadiusExpend;
         }
+
+        // ICircleCollider
 
         public Vector2 GetColliderCenter()
         {
@@ -52,20 +78,5 @@ namespace Tkool.BreakoutGameScene
             return Radius;
         }
 
-        public virtual BreakoutBlockCollisionEffect MakeBlockCollisionEffect(DistanceInfo2D distanceInfo)
-        {
-            return new BreakoutBlockCollisionEffect(distanceInfo);
-        }
-        
-        public virtual void RecieveCollisionEffect(BreakoutBallCollisionEffect effect)
-        {
-            Transform.position += (Vector3)effect.GetPositionCorrectDistance();
-            Velocity = effect.GetReflectedVelocity(Velocity);
-        }
-
-        public void Destroy()
-        {
-            OnDestroy(this);
-        }
     }
 }

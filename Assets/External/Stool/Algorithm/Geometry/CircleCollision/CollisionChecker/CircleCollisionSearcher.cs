@@ -47,7 +47,7 @@ namespace Stool.Algorithm.Geometry
 
         private void RecursiveCheck(
 			Func<Rectangle, float, CheckState> areaFunc,
-			Func<ICircleCollider, DistanceInfo2D> colliderFunc,
+			Func<ICircleCollider, CircleCollisionInfo> colliderFunc,
 			List<CircleCollisionInfo> result,
 		   int zorder, Rectangle area, CheckState parentState)
 		{
@@ -71,11 +71,10 @@ namespace Stool.Algorithm.Geometry
 			        var info = colliderFunc(_data.Data[i].Collider);
 			        if (info.IsHit)
 			        {
-			            result.Add(new CircleCollisionInfo(_data.Data[i].Collider, info));
+			            result.Add(info);
 			        }
 			    }
 			}
-            
 			for (int i = 0; i < 2; i++)
 			{
 				for (int j = 0; j < 2; j++)

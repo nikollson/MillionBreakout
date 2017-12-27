@@ -1,38 +1,57 @@
 ﻿
-using System;
 using Stool.Algorithm.Geometry;
 using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    abstract class BreakoutBlockBehaviour : MonoBehaviour , ICircleCollisionChecker
+    abstract class BreakoutBlockBehaviour : MonoBehaviour
     {
-        public Action<BreakoutBlockBehaviour> OnDestroy;
+        public MeshRenderer MeshRenderer;
 
-
-        public virtual BreakoutBallCollisionEffect MakeBallCollisionEffect(DistanceInfo2D distanceInfo2D)
-        {
-            return new BreakoutBallCollisionEffect(distanceInfo2D);
-        }
-        
-        public virtual void RecieveCollisionEffect(BreakoutBlockCollisionEffect effect)
-        {
-
-        }
-
-        public virtual bool CanCollision(BreakoutBallBehaviour ball)
-        {
-            return true;
-        }
-
+        public bool IsDestroyed { get; private set; }
+       
         public void Destroy()
         {
-            Destroy(gameObject);
-            OnDestroy(this);
+            IsDestroyed = true;
         }
 
-        public abstract CircleCollisionSearcher.CheckState CircleCollision_AreaCheck(Rectangle area, float currentWidth);
+        public void OnRenderBase()
+        {
+            var material = MeshRenderer.material;
 
-        public abstract DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider collider);
+            var blockArray = GetBreakoutBlockCollider().EnableArray;
+
+            int width = blockArray.GetLength(1);
+            int height = blockArray.GetLength(0);
+
+            var eraseArray = new float[blockArray.Length];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    int index = i * width + j;
+                    eraseArray[index] = blockArray[i, j] ? 0 : 1;
+                }
+            }
+
+            material.SetInt("ArrayWidth", width);
+            material.SetInt("ArrayHeight", height);
+            material.SetFloatArray("EraseArray", eraseArray);
+
+            OnRender(material);
+        }
+
+        public virtual void OnRender(Material material)
+        {
+            
+        }
+
+        public abstract IBlockCollisionEffect GetCollisionEffect();
+
+        public abstract void OnCollision(
+            int arrayX, int arrayY,
+            CircleCollisionInfo collision, IBallCollisionEffect ballHitEffect);
+
+        public abstract BreakoutBlockCollider GetBreakoutBlockCollider();
     }
 }

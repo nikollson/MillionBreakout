@@ -9,69 +9,92 @@ namespace Tkool.BreakoutGameScene
 {
     class BreakoutGameSystem : MonoBehaviour
     {
-        public ThousandBulletsManager ThousandBulletsManager;
-        public CircleCollisionManager CircleCollisionManager { get; private set; }
-        public DictionarizedLinkedList<BreakoutBlockBehaviour> BlocksManager { get; private set; }
+        public ThousandBulletsManager ThousandBullets;
+        public CircleCollisionManager CircleCollision;
+        public DictionarizedLinkedList<BreakoutBlockBehaviour> Blocks;
 
-        [SerializeField] private CircleCollsionSettingData _circleCollisionData;
-        
+        public CircleCollsionSettingData CircleCollisionSetting;
+
         public void Awake()
         {
-            CircleCollisionManager = new CircleCollisionManager(_circleCollisionData.GetFormatedData());
-            BlocksManager = new DictionarizedLinkedList<BreakoutBlockBehaviour>();
+            CircleCollision = new CircleCollisionManager(CircleCollisionSetting.GetFormatedData());
+            Blocks = new DictionarizedLinkedList<BreakoutBlockBehaviour>();
         }
 
         public void AddBall(BreakoutBallBehaviour ball, Vector3 position, Quaternion rotation)
         {
-            ThousandBulletsManager.AddBullet(ball, position, rotation);
-            CircleCollisionManager.AddCollider(ball);
-
-            ball.OnDestroy += RemoveBall;
-        }
-
-        private void RemoveBall(BreakoutBallBehaviour ball)
-        {
-            ThousandBulletsManager.Remove(ball);
-            CircleCollisionManager.RemoveCollider(ball);
+            ThousandBullets.AddBullet(ball, position, rotation);
+            CircleCollision.AddCollider(ball);
         }
 
         public void AddBlock(BreakoutBlockBehaviour block)
         {
-            BlocksManager.Add(block);
-
-            block.OnDestroy += RemoveBlock;
+            Blocks.Add(block);
         }
-
-        private void RemoveBlock(BreakoutBlockBehaviour block)
-        {
-            BlocksManager.Remove(block);
-        }
-
+        
         public void Update()
         {
-            CircleCollisionManager.UpdateColliderInfo();
+            // Update
 
-            foreach (var block in BlocksManager)
-            {
-                var result = CircleCollisionManager.Searcher.Check(block);
-                
-                foreach (var collision in result)
+            ThousandBullets.ForeachBullets(
+                x=>
                 {
-                    var ball = (BreakoutBallBehaviour) collision.Collider;
+                    float deltaTime = ThousandBullets.GetDeltaTime();
+                    (x as BreakoutBallBehaviour).PositionUpdateOnFrame(deltaTime);
+                });
 
-                    if (block.CanCollision(ball) == false) continue;
 
-                    var blockEffect = ball.MakeBlockCollisionEffect(collision.DistanceInfo);
-                    var ballEffect = block.MakeBallCollisionEffect(collision.DistanceInfo.GetReverse());
+            // Collision
 
-                    ball.RecieveCollisionEffect(ballEffect);
-                    block.RecieveCollisionEffect(blockEffect);
+            CircleCollision.UpdateColliderInfo();
+
+            foreach (var block in Blocks)
+            {
+                var circleCollisions = CircleCollision.Searcher.Check(block.GetBreakoutBlockCollider());
+
+                foreach (var circleCollision in circleCollisions)
+                {
+                    if (circleCollision.IsHit == false)
+                        continue;
+
+                    var collision = (BreakoutBlockCollisionInfo) circleCollision;
+                    var ball = collision.Collider as BreakoutBallBehaviour;
+
+                    var ballHitEffect = ball.GetCollisionEffect();
+                    var blockHitEffect = block.GetCollisionEffect();
+
+                    // Effects
+
+                    ball.OnCollisionPhysicsCorrect(collision);
+
+                    ball.OnCollision(collision, blockHitEffect);
+                    foreach (var gridInfo in collision.GridData)
+                    {
+                        block.OnCollision(
+                            gridInfo.ArrayX, gridInfo.ArrayY, 
+                            gridInfo.Collision, ballHitEffect);
+                    }
                 }
             }
+
+            // PrepareRender
+
+            foreach (var block in Blocks)
+            {
+                block.OnRenderBase();
+            }
+
+            // Remove
+
+            ThousandBullets.RemoveIf(
+                x => (x as BreakoutBallBehaviour).IsDestroyed,
+                x => CircleCollision.RemoveCollider(x as BreakoutBallBehaviour)
+            );
+            Blocks.RemoveIf(x => x.IsDestroyed);
         }
 
         [Serializable]
-        class CircleCollsionSettingData
+        public class CircleCollsionSettingData
         {
             public Vector2 areaCenter;
             public float areaWidth = 10;
@@ -79,7 +102,7 @@ namespace Tkool.BreakoutGameScene
 
             public CircleCollisionSetting GetFormatedData()
             {
-                return new CircleCollisionSetting(splitDepth,areaCenter,areaWidth);
+                return new CircleCollisionSetting(splitDepth, areaCenter, areaWidth);
             }
         }
     }

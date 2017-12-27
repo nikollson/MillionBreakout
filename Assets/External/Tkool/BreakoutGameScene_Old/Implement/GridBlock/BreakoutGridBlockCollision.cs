@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Stool.Algorithm.Geometry;
 using UnityEngine;
 
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
     static class BreakoutGridBlockCollision
     {
 
-        public static DistanceInfo2D CheckHitCircle(Rectangle rect, IBreakoutGridBlockData[,] enableArray, ICircleCollider circleCollider)
+        public static CircleCollisionInfo CheckHitCircle(Rectangle rect, IBreakoutGridBlockData[,] enableArray, ICircleCollider circleCollider)
         {
             var size = rect.Size;
             var center = circleCollider.GetColliderCenter();
@@ -16,7 +16,7 @@ namespace Tkool.BreakoutGameScene
             int arrayWidth = enableArray.GetLength(1);
             int arrayHeight = enableArray.GetLength(0);
 
-            var info = new GridBlockDistanceInfo();
+            var info = new GridBlockDistanceInfo(circleCollider);
 
             float sinr = Mathf.Sin(rect.Rotation);
             float cosr = Mathf.Cos(rect.Rotation);

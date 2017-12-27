@@ -1,5 +1,5 @@
 ﻿
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
     interface IBreakoutGridBlockData
     {

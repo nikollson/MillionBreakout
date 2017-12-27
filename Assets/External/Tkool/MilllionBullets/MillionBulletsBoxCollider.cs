@@ -19,7 +19,7 @@ namespace Tkool.MilllionBullets
         
         public BoxData GetBox()
         {
-            var vertices = GetBoxCollider().GetGlobalVertices(transform);
+            var vertices = BoxColliderUtility.GetGlobalVertices(GetBoxCollider(), transform);
 
             Vector3 center = (vertices[0] + vertices[2]) / 2;
             float width = (vertices[0] - vertices[1]).magnitude;

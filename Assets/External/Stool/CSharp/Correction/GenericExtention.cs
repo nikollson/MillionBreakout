@@ -27,10 +27,7 @@ namespace Stool.CSharp
                 var next = current.Next;
                 if (judgeFunc(current.Value))
                 {
-                    if (callBackFunc != null)
-                    {
-                        callBackFunc(current.Value);
-                    }
+                    callBackFunc(current.Value);
                     list.Remove(current);
                 }
                 current = next;

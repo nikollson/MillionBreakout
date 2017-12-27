@@ -1,7 +1,7 @@
 ﻿
 using Stool.Algorithm.Geometry;
 
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
     class BreakoutBlockCollisionEffect
     {

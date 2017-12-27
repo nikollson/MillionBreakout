@@ -18,6 +18,11 @@ namespace Tkool.ThousandBullets.Sample
             IsDead = false;
         }
 
+        public override float GetBulletRadius()
+        {
+            return 0.5f;
+        }
+
         public override Material GetInitalBulletMaterial()
         {
             return _setting.Material;
@@ -28,7 +33,7 @@ namespace Tkool.ThousandBullets.Sample
             return _setting.Texture;
         }
 
-        public override void OnUpdateBullet()
+        public override void OnUpdateBullet(float deltaTime)
         {
             _count++;
 

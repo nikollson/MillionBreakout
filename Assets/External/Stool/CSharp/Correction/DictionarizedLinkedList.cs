@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,10 +18,11 @@ namespace Stool.CSharp
             _dictionary = new Dictionary<T, LinkedListNode<T>>();
         }
 
-        public void Add(T value)
+        public LinkedListNode<T> Add(T value)
         {
             var node = _list.AddLast(value);
             _dictionary.Add(value, node);
+            return node;
         }
 
         public void Remove(T value)
@@ -28,6 +30,17 @@ namespace Stool.CSharp
             var node = _dictionary[value];
             _list.Remove(node);
             _dictionary.Remove(value);
+        }
+
+        public void Remove(LinkedListNode<T> node)
+        {
+            _list.Remove(node);
+            _dictionary.Remove(node.Value);
+        }
+
+        public void RemoveIf(Func<T,bool> judgeFunc, Action<T> callBack=null)
+        {
+            _list.RemoveNodeIf(judgeFunc, callBack);
         }
 
         public void Clear()

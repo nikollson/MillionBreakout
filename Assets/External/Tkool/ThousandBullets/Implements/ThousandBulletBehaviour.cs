@@ -20,7 +20,7 @@ namespace Tkool.ThousandBullets
             
         }
 
-        public virtual void OnUpdateBullet()
+        public virtual void OnUpdateBullet(float deltaTime)
         {
             
         }
@@ -30,10 +30,7 @@ namespace Tkool.ThousandBullets
             
         }
 
-        public virtual float GetBulletRadius()
-        {
-            return 0.5f;
-        }
+        public abstract float GetBulletRadius();
 
         public virtual Material GetInitalBulletMaterial()
         {

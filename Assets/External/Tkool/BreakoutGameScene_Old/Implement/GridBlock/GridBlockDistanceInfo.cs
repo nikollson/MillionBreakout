@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Stool.Algorithm.Geometry;
 using UnityEngine;
 
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
-    class GridBlockDistanceInfo : DistanceInfo2D
+    class GridBlockDistanceInfo : CircleCollisionInfo
     {
         public List<GridDistanceInfo> InfoList { get; private set; }
 
-        public GridBlockDistanceInfo() : base(Mathf.Infinity, 0)
+        public GridBlockDistanceInfo(ICircleCollider collider) : base(collider, new DistanceInfo2D(Mathf.Infinity, 0))
         {
             InfoList = new List<GridDistanceInfo>();
         }
@@ -18,8 +18,8 @@ namespace Tkool.BreakoutGameScene
         {
             if (Distance > info.Distance)
             {
-                Distance = info.Distance;
-                Angle = info.Angle;
+                UpdateDistance(info.Distance);
+                UpdateAngle(info.Angle);
             }
             if (info.IsHit)
             {

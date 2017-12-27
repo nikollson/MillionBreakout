@@ -1,11 +1,12 @@
 ﻿
+using Stool.Algorithm.Geometry;
 using UnityEngine;
 
 namespace Stool.ScriptingUtility
 {
-    static class ColliderUtility
+    static class BoxColliderUtility
     {
-        public static Vector3[] GetLocalVertices(this BoxCollider2D boxCollider)
+        public static Vector3[] GetLocalVertices(BoxCollider2D boxCollider)
         {
             var ret = new Vector3[4];
 
@@ -20,7 +21,7 @@ namespace Stool.ScriptingUtility
             return ret;
         }
 
-        public static Vector3[] GetGlobalVertices(this BoxCollider2D boxCollider, Transform transform)
+        public static Vector3[] GetGlobalVertices(BoxCollider2D boxCollider, Transform transform)
         {
             var vertices = GetLocalVertices(boxCollider);
             for (int i = 0; i < vertices.Length; i++)
@@ -28,6 +29,18 @@ namespace Stool.ScriptingUtility
                 vertices[i] = transform.TransformPoint(vertices[i]);
             }
             return vertices;
+        }
+
+        
+        public static Rectangle GetRectangle(BoxCollider2D boxColider, Transform transform)
+        {
+            var p = GetGlobalVertices(boxColider, transform);
+            var position = (p[0] + p[2]) / 2;
+            var dx = p[1] - p[0];
+            var dy = p[2] - p[1];
+            var size = new Vector2(dx.magnitude, dy.magnitude);
+            var rotation = Mathf.Atan2(dx.y, dx.x);
+            return new Rectangle(position, size, rotation);
         }
     }
 }

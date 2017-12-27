@@ -1,5 +1,5 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Tkool.BreakoutGameScene.Sample
 {
@@ -24,8 +24,8 @@ namespace Tkool.BreakoutGameScene.Sample
             {
                 for (int i = 0; i < BulletSetting.shootNum; i++)
                 {
-                    var ball = new BreakoutBallBehaviour(
-                        BulletSetting.GetRadius(), BulletSetting.GetVelocity(), BulletSetting.GetTexture());
+                    var ball = new SampleBall(BulletSetting.GetRadius(),
+                        BulletSetting.GetVelocity(), BulletSetting.GetTexture());
                     BreakoutGameSystem.AddBall(ball, BulletSetting.GetPosition(), BulletSetting.GetRotation());
                 }
             }

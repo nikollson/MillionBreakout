@@ -2,7 +2,7 @@
 using Stool.Algorithm.Geometry;
 using UnityEngine;
 
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
     class BreakoutBallCollisionEffect
     {

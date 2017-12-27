@@ -4,47 +4,35 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class SampleGridBlock : BreakoutGridBlockBehaviour
+    class SampleGridBlock : BreakoutBlockBehaviour
     {
-        public int Width = 5;
+        public BoxCollider2D BoxCollider;
+
+        public int Width = 4;
         public int Height = 5;
 
-        private BlockData[,] _blockData;
+        private BreakoutBlockCollider _blockCollider;
 
         public void Awake()
         {
-            _blockData = new BlockData[Height, Width];
-            for (int i = 0; i < Height; i++)
-            {
-                for (int j = 0; j < Width; j++)
-                {
-                    _blockData[i,j] = new BlockData();
-                }
-            }
+            _blockCollider = new BreakoutGridBoxCollider(Width, Height, transform, BoxCollider);
         }
 
-        public override IBreakoutGridBlockData[,] GetBlockArray()
+        public override IBlockCollisionEffect GetCollisionEffect()
         {
-            return _blockData;
+            return new SampleBlockCollisionEffect();
         }
 
-
-        public override void RecieveCollisionEffectGrid(BreakoutBlockCollisionEffect effect, GridBlockDistanceInfo distanceInfo)
+        public override void OnCollision(int arrayX, int arrayY, CircleCollisionInfo collision, IBallCollisionEffect ballHitEffect)
         {
-            foreach (var info in distanceInfo.InfoList)
-            {
-                _blockData[info.ArrayY, info.ArrayX].IsLiving = false;
-            }
+            var effect = (SampleBallCollisionEffect) ballHitEffect;
+            _blockCollider.EnableArray[arrayY, arrayX] = false;
+
         }
 
-        class BlockData : IBreakoutGridBlockData
+        public override BreakoutBlockCollider GetBreakoutBlockCollider()
         {
-            public bool IsLiving = true;
-
-            public bool IsEnable()
-            {
-                return IsLiving;
-            }
+            return _blockCollider;
         }
     }
 }

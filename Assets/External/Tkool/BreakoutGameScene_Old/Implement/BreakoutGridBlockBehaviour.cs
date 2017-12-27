@@ -2,7 +2,7 @@
 using Stool.Algorithm.Geometry;
 using UnityEngine;
 
-namespace Tkool.BreakoutGameScene
+namespace Tkool.BreakoutGameScene_Old
 {
     abstract class BreakoutGridBlockBehaviour : BreakoutBoxBlockBehaviour
     {
@@ -47,15 +47,15 @@ namespace Tkool.BreakoutGameScene
             material.SetFloatArray("EraseArray", eraseArray);
         }
 
-        public override DistanceInfo2D CircleCollision_ColliderCheck(ICircleCollider circleCollider)
+        public override CircleCollisionInfo CircleCollision_ColliderCheck(ICircleCollider circleCollider)
         {
             return BreakoutGridBlockCollision.CheckHitCircle(Rectangle, GetBlockArray(), circleCollider);
         }
 
         public override void RecieveCollisionEffect(BreakoutBlockCollisionEffect effect)
         {
-            var info = (GridBlockDistanceInfo)effect.DistanceInfo;
-            RecieveCollisionEffectGrid(effect, info);
+            //var info = (GridBlockDistanceInfo)effect;
+            //RecieveCollisionEffectGrid(effect, info);
         }
 
         public abstract void RecieveCollisionEffectGrid(BreakoutBlockCollisionEffect effect, GridBlockDistanceInfo distanceInfo);
