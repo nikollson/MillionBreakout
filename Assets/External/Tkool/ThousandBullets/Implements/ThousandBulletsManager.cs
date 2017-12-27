@@ -59,8 +59,12 @@ namespace Tkool.ThousandBullets
         {
             _controllers.RemoveNodeIf(
                 x => judgeFunc(x.BulletBehaviour),
-                x => callBack(x.BulletBehaviour)
-            );
+                x =>
+                {
+                    callBack(x.BulletBehaviour);
+                    _dictionary.Remove(x.BulletBehaviour);
+                    _recycle.Remove(x);
+                });
         }
 
         public void ForeachBullets(Action<ThousandBulletBehaviour> callback)

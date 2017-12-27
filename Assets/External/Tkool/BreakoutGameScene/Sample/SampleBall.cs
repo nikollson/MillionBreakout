@@ -16,12 +16,17 @@ namespace Tkool.BreakoutGameScene.Sample
 
         public override IBallCollisionEffect GetCollisionEffect()
         {
-            return new SampleBallCollisionEffect();
+            return new SampleBallCollisionEffect(true);
         }
 
         public override void OnCollision(CircleCollisionInfo collision, IBlockCollisionEffect blockHitEffect)
         {
             var effect = (SampleBlockCollisionEffect) blockHitEffect;
+
+            if (effect.DoErase == true)
+            {
+                Destroy();
+            }
         }
     }
 }
