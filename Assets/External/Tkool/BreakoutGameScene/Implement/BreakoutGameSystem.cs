@@ -77,13 +77,6 @@ namespace Tkool.BreakoutGameScene
                 }
             }
 
-            // PrepareRender
-
-            foreach (var block in Blocks)
-            {
-                block.OnRenderBase();
-            }
-
             // Remove
 
             ThousandBullets.RemoveIf(
@@ -91,6 +84,13 @@ namespace Tkool.BreakoutGameScene
                 x => CircleCollision.RemoveCollider(x as BreakoutBallBehaviour)
             );
             Blocks.RemoveIf(x => x.IsDestroyed);
+
+            // PrepareRender
+
+            foreach (var block in Blocks)
+            {
+                block.OnRenderBase();
+            }
         }
 
         [Serializable]
