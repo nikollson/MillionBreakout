@@ -2,6 +2,11 @@
 	Properties
 	{
 		MainTex("Base (RGB)", 2D) = "white" {}
+		TopColor("Top Color", Color) = (1,1,1,0.8)
+		LeftColor("Left Color", Color) = (1,1,1,0.4)
+		RightColor("Right Color", Color) = (0,0,0,0.3)
+		BottomColor("Bottom Color", Color) = (0,0,0,0.6)
+		LineWidth("Line Width", float) = 0.015
 	}
 
 	SubShader{
@@ -12,9 +17,15 @@
 			#pragma vertex vert
 			#pragma fragment frag
 
-			uniform int ArrayWidth;
-			uniform int ArrayHeight;
 			uniform sampler2D MainTex;
+			uniform float4 TopColor;
+			uniform float4 LeftColor;
+			uniform float4 RightColor;
+			uniform float4 BottomColor;
+			uniform float LineWidth;
+
+			uniform int ArrayWidth = 1;
+			uniform int ArrayHeight = 1;
 			uniform float EraseArray[1023];
 
 			struct appdata {
@@ -43,7 +54,34 @@
 					discard;
 				}
 
-				return tex2D(MainTex, v.uv);
+				float LineWidthX = LineWidth * ArrayWidth;
+				float LineWidthY = LineWidth * ArrayHeight;
+
+				float divx = frac(ArrayWidth * v.uv.x);
+				float divy = frac(ArrayHeight * v.uv.y);
+				float lx = step(LineWidthX, divx);
+				float ly = step(LineWidthY, divy);
+				float hx = step(divx, 1 - LineWidthX);
+				float hy = step(divy, 1 - LineWidthY);
+
+				float4 color = tex2D(MainTex, v.uv);
+
+				if (lx*ly*hx*hy == 0)
+				{
+					float4 lineColor;
+
+					if (lx == 0) lineColor = LeftColor;
+					if (ly == 0) lineColor = BottomColor;
+					if (hx == 0) lineColor = RightColor;
+					if (hy == 0) lineColor = TopColor;
+
+					float alpha = lineColor.w;
+					lineColor.w = 1;
+
+					color = lerp(color, lineColor, alpha);
+				}
+
+				return color;
 			}
 			ENDCG
 		}
