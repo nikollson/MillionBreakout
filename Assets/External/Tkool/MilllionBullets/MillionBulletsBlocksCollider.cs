@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets
 {
-    class MillionBulletsBlocksCollider : MillionBulletsBoxCollider
+    public class MillionBulletsBlocksCollider : MillionBulletsBoxCollider
     {
         public enum LifeCalucuration
         {
@@ -89,7 +89,7 @@ namespace Tkool.MilllionBullets
         }
     }
 
-    class BlocksInfo
+    public class BlocksInfo
     {
         public BoxData Box;
         public int ArrayWidth;

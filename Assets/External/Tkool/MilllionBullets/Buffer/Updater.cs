@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Buffer
 {
-    class Updater<TOption> where TOption : struct
+    public class Updater<TOption> where TOption : struct
     {
         private CommonData<TOption> _common;
         private ComputeShader _computeShader;

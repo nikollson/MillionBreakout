@@ -2,8 +2,8 @@
 	Properties
 	{
 		MainTex("Base (RGB)", 2D) = "white" {}
-		TopColor("Top Edge Color", Color) = (1,1,1,0.8)
-		LeftColor("Left Edge Color", Color) = (1,1,1,0.4)
+		TopColor("Top Edge Color", Color) = (1,1,1,0.6)
+		LeftColor("Left Edge Color", Color) = (1,1,1,0.3)
 		RightColor("Right Edge Color", Color) = (0,0,0,0.3)
 		BottomColor("Bottom Edge Color", Color) = (0,0,0,0.6)
 		LineWidth("Line Width", float) = 0.015

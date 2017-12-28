@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets
 {
-    class BulletsBuffer<TOption> where TOption:struct
+    public class BulletsBuffer<TOption> where TOption:struct
     {
         public CommonData<TOption> Data { get; private set; }
         public BulletsBufferAdder<TOption> Adder { get; private set; }

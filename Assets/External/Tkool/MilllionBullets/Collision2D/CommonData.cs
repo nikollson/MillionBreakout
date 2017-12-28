@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Collision2D
 {
-    class CommonData
+    public class CommonData
     {
         public List<ComputeBuffer> BulletsBuffers { get; private set; }
 

@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace Stool.SceneManagement
 {
-    class RecycleInstanciateManager
+    public class RecycleInstanciateManager
     {
         private List<GameObject> _gameObjects;
         private Queue<int> _emptyObjectIndex;

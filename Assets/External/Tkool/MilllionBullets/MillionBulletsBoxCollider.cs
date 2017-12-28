@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Tkool.MilllionBullets
 {
     [RequireComponent(typeof(BoxCollider2D))]
-    class MillionBulletsBoxCollider : MonoBehaviour
+    public class MillionBulletsBoxCollider : MonoBehaviour
     {
         public int HitCount { get; private set; }
         public Searcher.BoxColliderMode mode;
@@ -52,7 +52,7 @@ namespace Tkool.MilllionBullets
         }
     }
 
-    struct BoxData
+    public struct BoxData
     {
         public Vector3 Center;
         public float Angle;

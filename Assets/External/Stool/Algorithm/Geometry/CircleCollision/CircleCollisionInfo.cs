@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    class CircleCollisionInfo
+    public class CircleCollisionInfo
     {
         public ICircleCollider Collider { get; private set; }
         public float Distance { get; private set; }

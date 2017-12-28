@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class SampleBall : BreakoutBallBehaviour
+    public class SampleBall : BreakoutBallBehaviour
     {
         public Texture2D Texture;
 

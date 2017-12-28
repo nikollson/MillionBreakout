@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Buffer
 {
-    class CommonData<TOption> where TOption:struct
+    public class CommonData<TOption> where TOption:struct
     {
         public int Length { get; private set; }
         public BufferFunctionsBase<TOption> ControlFunctions { get; private set; }

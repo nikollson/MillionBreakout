@@ -4,7 +4,7 @@ using Stool.Algorithm.Geometry;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutBlockCollisionInfo : CircleCollisionInfo
+    public class BreakoutBlockCollisionInfo : CircleCollisionInfo
     {
         public List<GridInfo> GridData { get; private set; }
 

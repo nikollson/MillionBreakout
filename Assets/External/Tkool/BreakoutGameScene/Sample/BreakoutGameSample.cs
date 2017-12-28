@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class BreakoutGameSample : MonoBehaviour
+    public class BreakoutGameSample : MonoBehaviour
     {
         public BreakoutGameSystem BreakoutGameSystem;
         public BreakoutBlockBehaviour[] Blocks;

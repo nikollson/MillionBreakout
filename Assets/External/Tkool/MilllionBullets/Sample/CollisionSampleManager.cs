@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Sample
 {
-    class CollisionSampleManager : MonoBehaviour
+    public class CollisionSampleManager : MonoBehaviour
     {
         [SerializeField] private ComputeShader _emptyIndexComputeShader;
         [SerializeField] private ComputeShader _collisionComputeShader;

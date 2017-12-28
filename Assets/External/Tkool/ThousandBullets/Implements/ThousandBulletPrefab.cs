@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.ThousandBullets
 {
-    class ThousandBulletPrefab : MonoBehaviour
+    public class ThousandBulletPrefab : MonoBehaviour
     {
         public Material DefaultMaterial;
         public Texture2D DefaultTexture;

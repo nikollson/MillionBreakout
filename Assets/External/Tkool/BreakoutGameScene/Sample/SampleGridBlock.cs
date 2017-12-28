@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class SampleGridBlock : BreakoutBlockBehaviour
+    public class SampleGridBlock : BreakoutBlockBehaviour
     {
         public BoxCollider2D BoxCollider2D;
 

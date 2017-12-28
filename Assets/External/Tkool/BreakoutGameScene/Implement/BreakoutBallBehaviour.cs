@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    abstract class BreakoutBallBehaviour : ThousandBulletBehaviour, ICircleCollider
+    public abstract class BreakoutBallBehaviour : ThousandBulletBehaviour, ICircleCollider
     {
         public bool IsDestroyed { get; private set; }
         public float Radius { get; private set; }

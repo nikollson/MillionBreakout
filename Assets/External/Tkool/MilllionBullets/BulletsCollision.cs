@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Collision2D
 {
-    class BulletsCollision
+    public class BulletsCollision
     {
         public CommonData Data { get; private set; }
         public BufferAdder Adder { get; private set; }

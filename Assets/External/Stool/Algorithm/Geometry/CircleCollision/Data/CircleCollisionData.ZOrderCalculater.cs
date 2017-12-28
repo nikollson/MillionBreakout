@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    partial class CircleCollisionData
+    public partial class CircleCollisionData
     {
         static class ZOrderCalculater
         {

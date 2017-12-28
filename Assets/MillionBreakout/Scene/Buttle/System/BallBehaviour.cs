@@ -3,9 +3,9 @@ using Stool.Algorithm.Geometry;
 using Tkool.BreakoutGameScene;
 using UnityEngine;
 
-namespace MillionBreakout.Buttle
+namespace MillionBreakout
 {
-    class BallBehaviour : BreakoutBallBehaviour
+    public class BallBehaviour : BreakoutBallBehaviour
     {
         public BallBehaviour(float radius, Vector2 velocity, Texture2D texture) : base(radius, velocity)
         {

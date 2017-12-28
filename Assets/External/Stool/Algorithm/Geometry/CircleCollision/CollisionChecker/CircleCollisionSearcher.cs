@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-	partial class CircleCollisionSearcher
+	public class CircleCollisionSearcher
 	{
 		private CircleCollisionData _data;
 

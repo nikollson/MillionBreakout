@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Sample
 {
-    struct ColorBallOption
+    public struct ColorBallOption
     {
         public Vector4 Color;
 
@@ -12,8 +12,9 @@ namespace Tkool.MilllionBullets.Sample
             Color = color;
         }
     }
+    
 
-    class ColorBallFunctions : BufferFunctionsBase<ColorBallOption>
+    public class ColorBallFunctions : BufferFunctionsBase<ColorBallOption>
     {
         [SerializeField] private int _length = 100;
         [SerializeField] private Shader _surfaceShader;
@@ -51,7 +52,7 @@ namespace Tkool.MilllionBullets.Sample
 
         public override void UpdateBullets(ComputeBuffer statesBuffer, ComputeBuffer optionsBuffer)
         {
-            int kernel = _computeShader.FindKernel("OnUpdateBullet");
+            int kernel = _computeShader.FindKernel("Update");
             _computeShader.SetFloat("DeltaTime", Time.deltaTime);
             _computeShader.SetBuffer(kernel, "States", statesBuffer);
             _computeShader.SetBuffer(kernel, "Options", optionsBuffer);

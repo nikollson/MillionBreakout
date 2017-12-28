@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets
 {
-    abstract class BufferFunctionsBase<TOption> : MonoBehaviour where TOption:struct 
+    public abstract class BufferFunctionsBase<TOption> : MonoBehaviour where TOption:struct 
     {
         public virtual void AddOptions(ComputeBuffer optionsBuffer, int n, ComputeBuffer indicesBuffer, ComputeBuffer inputBuffer) 
         {

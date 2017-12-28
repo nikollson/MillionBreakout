@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    class CircleCollisionSetting
+    public class CircleCollisionSetting
     {
         public int Depth { get; private set; }
         public int MaxZOrder { get; private set; }

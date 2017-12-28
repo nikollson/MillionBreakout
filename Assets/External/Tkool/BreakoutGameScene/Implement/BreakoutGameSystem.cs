@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutGameSystem : MonoBehaviour
+    public class BreakoutGameSystem : MonoBehaviour
     {
         public ThousandBulletsManager ThousandBullets;
         public CircleCollisionManager CircleCollision;
@@ -46,36 +46,8 @@ namespace Tkool.BreakoutGameScene
 
             // Collision
 
-            CircleCollision.UpdateColliderInfo();
+            UpdateCollision();
 
-            foreach (var block in Blocks)
-            {
-                var circleCollisions = CircleCollision.Searcher.Check(block.GetBreakoutBlockCollider());
-
-                foreach (var circleCollision in circleCollisions)
-                {
-                    if (circleCollision.IsHit == false)
-                        continue;
-
-                    var collision = (BreakoutBlockCollisionInfo) circleCollision;
-                    var ball = collision.Collider as BreakoutBallBehaviour;
-
-                    var ballHitEffect = ball.GetCollisionEffect();
-                    var blockHitEffect = block.GetCollisionEffect();
-
-                    // Effects
-
-                    ball.OnCollisionPhysicsCorrect(collision);
-
-                    ball.OnCollision(collision, blockHitEffect);
-                    foreach (var gridInfo in collision.GridData)
-                    {
-                        block.OnCollision(
-                            gridInfo.ArrayX, gridInfo.ArrayY, 
-                            gridInfo.Collision, ballHitEffect);
-                    }
-                }
-            }
 
             // Remove
 
@@ -85,6 +57,7 @@ namespace Tkool.BreakoutGameScene
             );
             Blocks.RemoveIf(x => x.IsDestroyed);
 
+
             // PrepareRender
 
             foreach (var block in Blocks)
@@ -92,6 +65,45 @@ namespace Tkool.BreakoutGameScene
                 block.OnRenderBase();
             }
         }
+
+
+        private void UpdateCollision()
+        {
+            CircleCollision.UpdateColliderInfo();
+
+            foreach (var block in Blocks)
+            {
+                var blockCollider = block.GetBreakoutBlockCollider();
+
+                var circleCollisions = CircleCollision.Searcher.Check(blockCollider);
+
+
+                foreach (var circleCollision in circleCollisions)
+                {
+                    if (circleCollision.IsHit == false)
+                        continue;
+
+                    var collision = (BreakoutBlockCollisionInfo)circleCollision;
+                    var ball = collision.Collider as BreakoutBallBehaviour;
+
+                    // Effects
+
+                    var ballHitEffect = ball.GetCollisionEffect();
+                    var blockHitEffect = block.GetCollisionEffect();
+
+                    ball.OnCollisionPhysicsCorrect(collision);
+
+                    ball.OnCollision(collision, blockHitEffect);
+
+                    foreach (var gridInfo in collision.GridData)
+                    {
+                        block.OnCollision(
+                            gridInfo.ArrayX, gridInfo.ArrayY, gridInfo.Collision, ballHitEffect);
+                    }
+                }
+            }
+        }
+
 
         [Serializable]
         public class CircleCollsionSettingData

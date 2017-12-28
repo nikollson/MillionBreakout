@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.ThousandBullets
 {
-    abstract class ThousandBulletBehaviour
+    public abstract class ThousandBulletBehaviour
     {
         public Transform Transform { get { return _bulletPrefab.transform; } }
         public MeshRenderer MeshRenderer { get { return _bulletPrefab.MeshRenderer; } }

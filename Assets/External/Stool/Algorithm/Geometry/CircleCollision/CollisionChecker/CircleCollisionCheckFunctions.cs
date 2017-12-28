@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    static class CircleCollisionCheckFunctions
+    public static class CircleCollisionCheckFunctions
     {
         public static CircleCollisionInfo CircleCheck_Rectangle(Rectangle rect, ICircleCollider collider)
         {

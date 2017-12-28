@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.ThousandBullets.Sample
 {
-    class ThousandBulletsSample : MonoBehaviour
+    public class ThousandBulletsSample : MonoBehaviour
     {
         public ThousandBulletsManager ThousandBulletManager;
 

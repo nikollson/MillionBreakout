@@ -1,7 +1,7 @@
 ﻿
 namespace Tkool.MilllionBullets.Collision2D
 {
-    class BufferAdder
+    public class BufferAdder
     {
         private CommonData _common;
 

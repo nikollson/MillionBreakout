@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Buffer
 {
-    class EmptyIndexQueue
+    public class EmptyIndexQueue
     {
         public int RestQueue { get; private set; }
         public int Length { get; private set; }

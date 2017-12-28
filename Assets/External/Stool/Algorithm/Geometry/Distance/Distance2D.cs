@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    static class Distance2D
+    public static class Distance2D
     {
         public static DistanceInfo2D RectangleToPoint(Rectangle a, Vector2 b)
         {

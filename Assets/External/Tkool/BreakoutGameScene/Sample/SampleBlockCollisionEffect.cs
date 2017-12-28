@@ -1,7 +1,7 @@
 ﻿
 namespace Tkool.BreakoutGameScene.Sample
 {
-    class SampleBlockCollisionEffect : IBlockCollisionEffect
+    public class SampleBlockCollisionEffect : IBlockCollisionEffect
     {
         public bool DoErase { get; set; }
 

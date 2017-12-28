@@ -2,9 +2,9 @@
 using Tkool.BreakoutGameScene;
 using UnityEngine;
 
-namespace MillionBreakout.Buttle
+namespace MillionBreakout
 {
-    class ButtleSystem : MonoBehaviour
+    public class ButtleSystem : MonoBehaviour
     {
         public BreakoutGameSystem BreakoutGameSystem;
     }

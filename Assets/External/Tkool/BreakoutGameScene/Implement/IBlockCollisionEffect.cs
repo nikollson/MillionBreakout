@@ -1,7 +1,7 @@
 ﻿
 namespace Tkool.BreakoutGameScene
 {
-    interface IBlockCollisionEffect
+    public interface IBlockCollisionEffect
     {
     }
 }

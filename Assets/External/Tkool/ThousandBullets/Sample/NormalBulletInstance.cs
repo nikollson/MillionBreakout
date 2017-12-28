@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.ThousandBullets.Sample
 {
-    class NormalBulletInstance : ThousandBulletBehaviour
+    public class NormalBulletInstance : ThousandBulletBehaviour
     {
         private int _count = 0;
         private Setting _setting;

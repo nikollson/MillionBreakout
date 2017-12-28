@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    abstract class BreakoutBlockCollider : ICircleCollisionChecker
+    public abstract class BreakoutBlockCollider : ICircleCollisionChecker
     {
         public bool DoCheckCollision { get; private set; }
         public bool[,] EnableArray { get; set; }

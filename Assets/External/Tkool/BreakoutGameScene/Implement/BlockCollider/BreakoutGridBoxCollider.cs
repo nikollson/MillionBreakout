@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    class BreakoutGridBoxCollider : BreakoutBlockCollider
+    public class BreakoutGridBoxCollider : BreakoutBlockCollider
     {
         public Rectangle Rectangle
         {

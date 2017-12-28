@@ -5,7 +5,7 @@ using Stool.CSharp;
 
 namespace Stool.Algorithm.Geometry
 {
-    class CircleCollisionManager
+    public class CircleCollisionManager
     {
         public CircleCollisionData Data { get; private set; }
         public CircleCollisionSearcher Searcher { get; private set; }

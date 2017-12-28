@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Stool.CSharp
 {
-    static class GenericExtention
+    public static class GenericExtention
     {
         public static void RemoveNodeFromHashSet<T>(this LinkedList<T> list, HashSet<T> hashSet)
         {

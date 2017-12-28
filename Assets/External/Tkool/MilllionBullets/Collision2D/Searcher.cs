@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Collision2D
 {
-    class Searcher
+    public class Searcher
     {
         public enum BoxColliderMode { Normal, PlayerBar , EraseBall};
 

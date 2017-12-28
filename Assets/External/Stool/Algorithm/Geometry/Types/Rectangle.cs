@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Stool.Algorithm.Geometry
 {
-    struct Rectangle
+    public struct Rectangle
     {
         public Vector2 Position;
         public Vector2 Size;

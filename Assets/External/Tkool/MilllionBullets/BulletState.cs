@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets
 {
-    struct BulletState
+    public struct BulletState
     {
         public Vector3 Position;
         public Vector3 Velocity;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
-    abstract class BreakoutBlockBehaviour : MonoBehaviour
+    public abstract class BreakoutBlockBehaviour : MonoBehaviour
     {
         public MeshRenderer MeshRenderer;
 

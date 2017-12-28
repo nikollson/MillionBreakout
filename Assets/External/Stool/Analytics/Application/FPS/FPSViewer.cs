@@ -7,7 +7,6 @@ namespace Stool.Analytics
         [SerializeField] private UnityEngine.UI.Text _textUI;
 
 
-        int frameCount;
         float prevTime;
         private int prevFrame = 0;
 
@@ -19,7 +18,6 @@ namespace Stool.Analytics
 
         void Start()
         {
-            frameCount = 0;
             prevTime = 0.0f;
         }
 

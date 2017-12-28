@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Stool.ScriptingUtility
 {
-    static class BoxColliderUtility
+    public static class BoxColliderUtility
     {
         public static Vector3[] GetLocalVertices(BoxCollider2D boxCollider)
         {

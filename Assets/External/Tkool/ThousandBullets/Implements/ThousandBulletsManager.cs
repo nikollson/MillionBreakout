@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Tkool.ThousandBullets
 {
-    class ThousandBulletsManager : MonoBehaviour
+    public class ThousandBulletsManager : MonoBehaviour
     {
         public GameObject DefaultPrefab;
 

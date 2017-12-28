@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tkool.MilllionBullets.Sample
 {
-    class BufferSampleManager : MonoBehaviour
+    public class BufferSampleManager : MonoBehaviour
     {
         [SerializeField] private ComputeShader _emptyIndexComputeShader;
         [SerializeField] private ColorBallFunctions _colorBallFunctions;

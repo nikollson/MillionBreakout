@@ -5,7 +5,7 @@ using Stool.CSharp;
 
 namespace Tkool.MilllionBullets.Buffer
 {
-    class BulletsBufferAdder<TOption> where TOption:struct
+    public class BulletsBufferAdder<TOption> where TOption:struct
     {
         public int CopyBufferLength { get; private set; }
         public EmptyIndexQueue EmptyIndexQueue { get; private set; }

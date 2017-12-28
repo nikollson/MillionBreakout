@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Stool.CSharp
 {
-    class DictionarizedLinkedList<T> : IEnumerable<T>
+    public class DictionarizedLinkedList<T> : IEnumerable<T>
     {
         private LinkedList<T> _list;
         private Dictionary<T, LinkedListNode<T>> _dictionary;
