@@ -4,7 +4,7 @@ namespace Stool.GameEditing
 {
     public class SpriteRendererOff : MonoBehaviour {
 
-        void Awake()
+        void Start()
         {
             GetComponent<SpriteRenderer>().enabled = false;
         }

@@ -17,7 +17,8 @@ namespace Tkool.BreakoutGameScene
 
         public void Awake()
         {
-            CircleCollision = new CircleCollisionManager(CircleCollisionSetting.GetFormatedData());
+            var collisionAreaSetting = CircleCollisionSetting.GetFormatedData(transform.position);
+            CircleCollision = new CircleCollisionManager(collisionAreaSetting);
             Blocks = new DictionarizedLinkedList<BreakoutBlockBehaviour>();
         }
 
@@ -47,7 +48,7 @@ namespace Tkool.BreakoutGameScene
             // Collision
 
             UpdateCollision();
-
+            
 
             // Remove
 
@@ -55,7 +56,7 @@ namespace Tkool.BreakoutGameScene
                 x => (x as BreakoutBallBehaviour).IsDestroyed,
                 x => CircleCollision.RemoveCollider(x as BreakoutBallBehaviour)
             );
-            Blocks.RemoveIf(x => x.IsDestroyed);
+            Blocks.RemoveIf(x => x.IsDestroyed, x=>Destroy(x.gameObject));
 
 
             // PrepareRender
@@ -73,10 +74,7 @@ namespace Tkool.BreakoutGameScene
 
             foreach (var block in Blocks)
             {
-                var blockCollider = block.GetBreakoutBlockCollider();
-
-                var circleCollisions = CircleCollision.Searcher.Check(blockCollider);
-
+                var circleCollisions = CircleCollision.Searcher.Check(block.BlockCollider);
 
                 foreach (var circleCollision in circleCollisions)
                 {
@@ -85,6 +83,8 @@ namespace Tkool.BreakoutGameScene
 
                     var collision = (BreakoutBlockCollisionInfo)circleCollision;
                     var ball = collision.Collider as BreakoutBallBehaviour;
+
+                    if (block.CanCollision(ball) == false) continue;
 
                     // Effects
 
@@ -108,11 +108,10 @@ namespace Tkool.BreakoutGameScene
         [Serializable]
         public class CircleCollsionSettingData
         {
-            public Vector2 areaCenter;
             public float areaWidth = 10;
             public int splitDepth = 8;
 
-            public CircleCollisionSetting GetFormatedData()
+            public CircleCollisionSetting GetFormatedData(Vector3 areaCenter)
             {
                 return new CircleCollisionSetting(splitDepth, areaCenter, areaWidth);
             }

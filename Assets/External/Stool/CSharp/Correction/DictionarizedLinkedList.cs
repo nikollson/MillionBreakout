@@ -40,7 +40,14 @@ namespace Stool.CSharp
 
         public void RemoveIf(Func<T,bool> judgeFunc, Action<T> callBack=null)
         {
-            _list.RemoveNodeIf(judgeFunc, callBack);
+            _list.RemoveNodeIf(
+                judgeFunc,
+                (value) =>
+                {
+                    _dictionary.Remove(value);
+                    callBack(value);
+                }
+            );
         }
 
         public void Clear()

@@ -4,9 +4,25 @@ using UnityEngine;
 
 namespace Tkool.BreakoutGameScene
 {
+    [RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
     public abstract class BreakoutBlockBehaviour : MonoBehaviour
     {
-        public MeshRenderer MeshRenderer;
+
+        public BreakoutBlockCollider BlockCollider
+        {
+            get
+            {
+                if (_blockCollider == null)
+                {
+                    Debug.LogError(gameObject.name + " のBlockColliderがNullです");
+                }
+                return _blockCollider;
+            }
+        }
+
+        [SerializeField]
+        private BreakoutBlockCollider _blockCollider;
+
 
         public bool IsDestroyed { get; private set; }
        
@@ -17,26 +33,32 @@ namespace Tkool.BreakoutGameScene
 
         public void OnRenderBase()
         {
-            var material = MeshRenderer.material;
+            var meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer == null || meshRenderer.enabled == false) return;
 
-            var blockArray = GetBreakoutBlockCollider().EnableArray;
+            var material = meshRenderer.material;
 
-            int width = blockArray.GetLength(1);
-            int height = blockArray.GetLength(0);
-
-            var eraseArray = new float[blockArray.Length];
-            for (int i = 0; i < height; i++)
+            if (BlockCollider != null)
             {
-                for (int j = 0; j < width; j++)
-                {
-                    int index = i * width + j;
-                    eraseArray[index] = blockArray[i, j] ? 0 : 1;
-                }
-            }
+                var blockArray = BlockCollider.EnableArray;
 
-            material.SetInt("ArrayWidth", width);
-            material.SetInt("ArrayHeight", height);
-            material.SetFloatArray("EraseArray", eraseArray);
+                int width = blockArray.GetLength(1);
+                int height = blockArray.GetLength(0);
+
+                var eraseArray = new float[blockArray.Length];
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        int index = i * width + j;
+                        eraseArray[index] = blockArray[i, j] ? 0 : 1;
+                    }
+                }
+
+                material.SetInt("ArrayWidth", width);
+                material.SetInt("ArrayHeight", height);
+                material.SetFloatArray("EraseArray", eraseArray);
+            }
 
             OnRender(material);
         }
@@ -46,12 +68,15 @@ namespace Tkool.BreakoutGameScene
             
         }
 
+        public virtual bool CanCollision(BreakoutBallBehaviour ball)
+        {
+            return true;
+        }
+
         public abstract IBlockCollisionEffect GetCollisionEffect();
 
         public abstract void OnCollision(
             int arrayX, int arrayY,
             CircleCollisionInfo collision, IBallCollisionEffect ballHitEffect);
-
-        public abstract BreakoutBlockCollider GetBreakoutBlockCollider();
     }
 }
