@@ -26,7 +26,7 @@
 
 			uniform int ArrayWidth = 1;
 			uniform int ArrayHeight = 1;
-			uniform float EraseArray[1023];
+			uniform float EraseArray[400];
 
 			struct appdata {
 				float4 vertex   : POSITION;
@@ -54,6 +54,7 @@
 					discard;
 				}
 
+				
 				float LineWidthX = LineWidth * ArrayWidth;
 				float LineWidthY = LineWidth * ArrayHeight;
 
@@ -63,9 +64,10 @@
 				float ly = step(LineWidthY, divy);
 				float hx = step(divx, 1 - LineWidthX);
 				float hy = step(divy, 1 - LineWidthY);
-
+				
 				float4 color = tex2D(MainTex, v.uv);
 
+				
 				if (lx*ly*hx*hy == 0)
 				{
 					float4 lineColor;
@@ -80,7 +82,7 @@
 
 					color = lerp(color, lineColor, alpha);
 				}
-
+				
 				return color;
 			}
 			ENDCG
