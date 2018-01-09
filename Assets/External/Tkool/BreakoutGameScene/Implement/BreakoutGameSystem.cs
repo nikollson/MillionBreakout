@@ -56,7 +56,11 @@ namespace Tkool.BreakoutGameScene
                 x => (x as BreakoutBallBehaviour).IsDestroyed,
                 x => CircleCollision.RemoveCollider(x as BreakoutBallBehaviour)
             );
-            Blocks.RemoveIf(x => x.IsDestroyed, x=>Destroy(x.gameObject));
+            Blocks.RemoveIf(
+                x => x.IsDestroyed || x.BlockCollider.IsEnable() == false,
+                x => Destroy(x.gameObject)
+            );
+
 
 
             // PrepareRender
@@ -89,16 +93,17 @@ namespace Tkool.BreakoutGameScene
                     // Effects
 
                     var ballHitEffect = ball.GetCollisionEffect();
-                    var blockHitEffect = block.GetCollisionEffect();
 
                     ball.OnCollisionPhysicsCorrect(collision);
 
-                    ball.OnCollision(collision, blockHitEffect);
 
                     foreach (var gridInfo in collision.GridData)
                     {
                         block.OnCollision(
                             gridInfo.ArrayX, gridInfo.ArrayY, gridInfo.Collision, ballHitEffect);
+
+                        var blockHitEffect = block.GetCollisionEffect(gridInfo.ArrayX, gridInfo.ArrayY);
+                        ball.OnCollision(collision, blockHitEffect);
                     }
                 }
             }

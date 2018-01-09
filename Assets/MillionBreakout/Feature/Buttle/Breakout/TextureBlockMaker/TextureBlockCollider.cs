@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MillionBreakout
 {
-    class TextureBlockCollider : BreakoutGridBlockCollider
+    public class TextureBlockCollider : BreakoutGridBlockCollider
     {
         public GridColorSetting ColorSetting;
 

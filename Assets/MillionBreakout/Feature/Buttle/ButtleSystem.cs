@@ -11,5 +11,9 @@ namespace MillionBreakout
         public static ButtleScheduler Scheduler;
         public static Camera Camera;
         public static ButtleTime Time;
+        public static ButtleSkillManager SkillManager;
+        public static ButtleParty Party;
+        public static ButtleWaterSystem WaterSystem;
+        public static ButtleStage Stage;
     }
 }

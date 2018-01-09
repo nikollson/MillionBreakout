@@ -11,7 +11,7 @@ namespace Tkool.ThousandBullets
     {
         public GameObject DefaultPrefab;
 
-        public Func<float> GetDeltaTime { get; private set; }
+        private Func<float> _getDeltaTime;
 
         private RecycleInstanciateManager _recycle;
         private LinkedList<BulletRecycleController> _controllers;
@@ -22,8 +22,6 @@ namespace Tkool.ThousandBullets
             _recycle = new RecycleInstanciateManager();
             _controllers = new LinkedList<BulletRecycleController>();
             _dictionary = new Dictionary<ThousandBulletBehaviour, LinkedListNode<BulletRecycleController>>();
-
-            GetDeltaTime = () => Time.deltaTime;
         }
 
         public void Update()
@@ -61,7 +59,8 @@ namespace Tkool.ThousandBullets
                 x => judgeFunc(x.BulletBehaviour),
                 x =>
                 {
-                    callBack(x.BulletBehaviour);
+                    if (callBack != null)
+                        callBack(x.BulletBehaviour);
                     _dictionary.Remove(x.BulletBehaviour);
                     _recycle.Remove(x);
                 });
@@ -77,7 +76,19 @@ namespace Tkool.ThousandBullets
 
         public void SetDeltaTimeFunction(Func<float> deltaTimeFunction)
         {
-            GetDeltaTime = deltaTimeFunction;
+            _getDeltaTime = deltaTimeFunction;
+        }
+
+        public float GetDeltaTime()
+        {
+            float deltaTime = Time.deltaTime;
+
+            if (_getDeltaTime != null)
+            {
+                deltaTime = _getDeltaTime();
+            }
+
+            return deltaTime;
         }
 
 
