@@ -32,10 +32,5 @@ namespace MillionBreakout
                 transform.position = nextPosition;
             }
         }
-
-        public override IBlockCollisionEffect GetCollisionEffect()
-        {
-            return new BlockCollisionEffect();
-        }
     }
 }

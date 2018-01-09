@@ -9,11 +9,12 @@ namespace MillionBreakout
     {
         public BallCollisionEffect CollisionEffect;
 
-        public int HP = 1;
+        public int HP;
 
-        protected BallBehaviour(float radius, Vector2 velocity) : base(radius, velocity)
+        protected BallBehaviour(BallCollisionEffect effect, int hp, float radius, Vector2 velocity) : base(radius, velocity)
         {
-
+            HP = hp;
+            CollisionEffect = effect;
         }
 
         public override void OnCollision(CircleCollisionInfo collision, IBlockCollisionEffect blockHitEffect)
@@ -25,9 +26,20 @@ namespace MillionBreakout
                 Destroy();
             }
 
-            if (effect.Attack != 0)
+            if (effect.RecieveDamage)
             {
-                HP -= Mathf.Min(HP, effect.Attack);
+                HP -= Mathf.Min(HP, Mathf.Min(effect.RecieveDamageMax, CollisionEffect.Attack));
+            }
+
+            if (effect.DoSpoit)
+            {
+                ButtleSystem.WaterSystem.AddSnow(Transform.position, HP);
+                Destroy();
+            }
+
+            if (HP == 0)
+            {
+                Destroy();
             }
         }
 

@@ -12,6 +12,8 @@ namespace MillionBreakout
         public Vector2 VelocityY = new Vector2(0, 1);
         public Vector2 Radius = new Vector2(0.1f, 0.2f);
 
+        public BallCollisionEffect collisionEffect;
+
         private float _timeMemo = 0;
 
         public void Update()
@@ -26,7 +28,7 @@ namespace MillionBreakout
                 {
                     var velocity = new Vector2(GetRand(VelocityX), GetRand(VelocityY));
                     var radius = GetRand(Radius);
-                    var ball = new TestBall(radius, velocity);
+                    var ball = new TestBall(collisionEffect, 5, radius, velocity);
 
                     ButtleSystem.Breakout.AddBall(ball, transform.position, Quaternion.identity);
                 }

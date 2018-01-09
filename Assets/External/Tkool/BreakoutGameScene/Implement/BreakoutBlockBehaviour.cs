@@ -73,7 +73,7 @@ namespace Tkool.BreakoutGameScene
             return true;
         }
 
-        public abstract IBlockCollisionEffect GetCollisionEffect();
+        public abstract IBlockCollisionEffect GetCollisionEffect(int arrayX, int arrayY);
 
         public abstract void OnCollision(
             int arrayX, int arrayY,

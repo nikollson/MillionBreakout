@@ -1,10 +1,11 @@
 ﻿
+using System;
 using Tkool.BreakoutGameScene;
 using UnityEngine;
 
 namespace MillionBreakout
 {
-    [SerializeField]
+    [Serializable]
     public class BallCollisionEffect : IBallCollisionEffect
     {
         public bool DoErase = false;

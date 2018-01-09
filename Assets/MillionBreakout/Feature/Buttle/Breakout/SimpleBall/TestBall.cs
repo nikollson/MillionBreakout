@@ -6,14 +6,10 @@ namespace MillionBreakout
 
     public class TestBall : BallBehaviour
     {
-        public TestBall(float radius, Vector2 velocity) : base(radius, velocity)
+        public TestBall(BallCollisionEffect effect, int hp, float radius, Vector2 velocity) 
+            : base(effect, hp, radius, velocity)
         {
 
-        }
-
-        public override IBallCollisionEffect GetCollisionEffect()
-        {
-            return new BallCollisionEffect();
         }
     }
 }

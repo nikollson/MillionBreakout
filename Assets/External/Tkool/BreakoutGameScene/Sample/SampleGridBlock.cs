@@ -9,7 +9,7 @@ namespace Tkool.BreakoutGameScene.Sample
         public bool DoErase = false;
         public bool CantErase = false;
 
-        public override IBlockCollisionEffect GetCollisionEffect()
+        public override IBlockCollisionEffect GetCollisionEffect(int arrrayX, int arrayY)
         {
             return new SampleBlockCollisionEffect(DoErase);
         }
